@@ -4,6 +4,9 @@ This project is made possible by the following contributors:
 
 ## Core Team
 
+- **[patgpt](https://github.com/patgpt)**
+  - Contributor
+
 - **[scottonanski](https://github.com/scottonanski)**
   - Core contributor
   - Project development
