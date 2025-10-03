@@ -1,18 +1,20 @@
 ---
 layout: home
 
-<img src="/logo-red-glow.png" alt="Skynet MCP Logo" width="140" style="display:block;margin:0 auto 1.5rem auto;box-shadow:0 0 32px 8px #ff0033; border-radius:16px;" />
-
-name: "Skynet MCP"
-text: "Persistent Memory for AI"
-tagline: Advanced Model Context Protocol server with dual database architecture
-actions:
-  - theme: brand
-    text: Get Started
-    link: /guide/
-  - theme: alt
-    text: API Reference
-    link: /api/
+hero:
+  name: "Skynet MCP"
+  text: "Persistent Memory for AI"
+  tagline: Advanced Model Context Protocol server with dual database architecture
+  image:
+    src: /logo-red-glow.png
+    alt: Skynet MCP Logo
+  actions:
+    - theme: brand
+      text: Get Started
+      link: /guide/
+    - theme: alt
+      text: API Reference
+      link: /api/
 
 features:
   - title: 🧠 Persistent Memory
