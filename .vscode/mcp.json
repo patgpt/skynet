@@ -1,0 +1,19 @@
+{
+  "servers": {
+    "skynet": {
+      "type": "stdio",
+      "command": "bun",
+      "args": ["run", "dist/index.js"],
+      "cwd": "/Users/wavefunction/dev/patgpt-mcp",
+      "env": {
+        "MEMGRAPH_HOST": "localhost",
+        "MEMGRAPH_PORT": "7687",
+        "MEMGRAPH_USERNAME": "",
+        "MEMGRAPH_PASSWORD": "",
+        "CHROMA_HOST": "localhost",
+        "CHROMA_PORT": "8000",
+        "CHROMA_API_URL": "http://localhost:8000"
+      }
+    }
+  }
+}

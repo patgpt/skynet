@@ -1,0 +1,15 @@
+{
+  "entryPoints": ["src"],
+  "entryPointStrategy": "expand",
+  "out": "docs/api-generated",
+  "plugin": ["typedoc-plugin-markdown"],
+  "readme": "none",
+  "hideGenerator": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "categorizeByGroup": true,
+  "groupOrder": ["Infrastructure", "Database", "Memory", "Interactions", "Cognitive", "*"],
+  "sort": ["source-order"],
+  "kindSortOrder": ["Function", "Class", "Interface", "TypeAlias"]
+}

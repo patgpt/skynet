@@ -1,0 +1,53 @@
+services:
+  memgraph:
+    image: memgraph/memgraph-mage:latest
+    container_name: memgraph-mage
+    ports:
+      - "7687:7687" # Bolt protocol
+      - "7444:7444" # HTTP endpoint
+    environment:
+      - MEMGRAPH="--log-level=TRACE --also-log-to-stderr"
+    volumes:
+      - memgraph_data:/var/lib/memgraph
+      - memgraph_log:/var/log/memgraph
+      - memgraph_etc:/etc/memgraph
+    command: ["--log-level=INFO", "--also-log-to-stderr"]
+    networks:
+      - memgraph-network
+
+  memgraph-lab:
+    image: memgraph/lab:latest
+    container_name: memgraph-lab
+    ports:
+      - "3000:3000"
+    environment:
+      - QUICK_CONNECT_MG_HOST=memgraph
+      - QUICK_CONNECT_MG_PORT=7687
+    depends_on:
+      - memgraph
+    networks:
+      - memgraph-network
+
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: chroma-db
+    ports:
+      - "8000:8000"
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_HTTP_PORT=8000
+      - PERSIST_DIRECTORY=/chroma/chroma
+    volumes:
+      - chroma_data:/chroma/chroma
+    networks:
+      - memgraph-network
+
+volumes:
+  memgraph_data:
+  memgraph_log:
+  memgraph_etc:
+  chroma_data:
+
+networks:
+  memgraph-network:
+    driver: bridge
