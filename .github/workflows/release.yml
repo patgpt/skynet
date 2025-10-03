@@ -2,13 +2,13 @@ name: Release
 
 on:
     push:
-        tags:
-            - "v*"
+        branches:
+            - main
     workflow_dispatch:
         inputs:
             version:
                 description: "Version to release (e.g., v1.0.0)"
-                required: true
+                required: false
 
 permissions:
     contents: write
@@ -65,15 +65,30 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
+            - name: Get version from package.json
+              id: package-version
+              run: echo "version=v$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+            - name: Check if tag exists
+              id: check-tag
+              run: |
+                  if git ls-remote --tags origin | grep -q "refs/tags/${{ steps.package-version.outputs.version }}"; then
+                    echo "exists=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "exists=false" >> $GITHUB_OUTPUT
+                  fi
+
             - name: Download build artifact
+              if: steps.check-tag.outputs.exists == 'false'
               uses: actions/download-artifact@v4
               with:
                   name: dist
                   path: dist/
 
             - name: Create tarball
+              if: steps.check-tag.outputs.exists == 'false'
               run: |
-                  tar -czf skynet-mcp-${{ github.ref_name }}.tar.gz \
+                  tar -czf skynet-${{ steps.package-version.outputs.version }}.tar.gz \
                     dist/ \
                     package.json \
                     bun.lock \
@@ -82,13 +97,16 @@ jobs:
                     docker-compose.yml
 
             - name: Create Release
+              if: steps.check-tag.outputs.exists == 'false'
               uses: softprops/action-gh-release@v2
               with:
+                  tag_name: ${{ steps.package-version.outputs.version }}
+                  name: Release ${{ steps.package-version.outputs.version }}
                   files: |
-                      skynet-mcp-${{ github.ref_name }}.tar.gz
+                      skynet-${{ steps.package-version.outputs.version }}.tar.gz
                       dist/index.js
                   generate_release_notes: true
                   draft: false
-                  prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+                  prerelease: ${{ contains(steps.package-version.outputs.version, 'alpha') || contains(steps.package-version.outputs.version, 'beta') || contains(steps.package-version.outputs.version, 'rc') }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

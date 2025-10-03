@@ -5,7 +5,7 @@
  * Combines graph database (Memgraph) for relationship tracking and vector database (Chroma)
  * for semantic memory storage.
  *
- * @module skynet-mcp
+ * @module skynet
  * @version 1.0.0
  */
 

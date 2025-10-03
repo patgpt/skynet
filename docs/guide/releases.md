@@ -1,33 +1,35 @@
 # Quick Release Guide
 
-## Create a Release
+## Create a Release (CI-Only)
 
-```bash
-# Using helper script (recommended)
-./scripts/create-release.sh v1.0.0 "Initial release"
-git push origin main v1.0.0
+All releases are handled by GitHub Actions:
 
-# Manual
-bun run release                           # Test + build
-vim package.json                          # Update version
-git commit -am "chore: bump v1.0.0"
-git tag -a v1.0.0 -m "Release v1.0.0"
-git push origin main v1.0.0
-```
+1. **Update version** in `package.json`
+2. **Commit and push** to `main`
+3. **Create GitHub release** with new tag (e.g., `v1.0.0`)
+4. **CI automatically**:
+   - Runs tests
+   - Builds production bundle
+   - Creates release artifacts
+   - Publishes to npm and GitHub Packages
 
 ## Pre-release
 
-```bash
-./scripts/create-release.sh v1.0.0-alpha.1 "Alpha release"
-git push origin main v1.0.0-alpha.1
-```
+For pre-releases, use version suffixes:
+- `v1.0.0-alpha.1` - Alpha release
+- `v1.0.0-beta.1` - Beta release  
+- `v1.0.0-rc.1` - Release candidate
+
+Mark as "pre-release" when creating the GitHub release.
 
 ## What Gets Released
 
 - ✅ Tests pass
 - ✅ Build succeeds (3.9MB)
-- ✅ Tarball: `skynet-mcp-vX.Y.Z.tar.gz`
+- ✅ Tarball: `skynet-vX.Y.Z.tar.gz`
 - ✅ Bundle: `dist/index.js`
+- ✅ Published to npm
+- ✅ Published to GitHub Packages
 - ✅ Auto-generated release notes
 - ✅ Pre-release flag (if alpha/beta/rc)
 
@@ -35,9 +37,9 @@ git push origin main v1.0.0-alpha.1
 
 ```bash
 # Full package
-wget https://github.com/patgpt/skynet/releases/latest/download/skynet-mcp-v1.0.0.tar.gz
-tar -xzf skynet-mcp-v1.0.0.tar.gz
-cd skynet-mcp-v1.0.0
+wget https://github.com/patgpt/skynet/releases/latest/download/skynet-v1.0.0.tar.gz
+tar -xzf skynet-v1.0.0.tar.gz
+cd skynet-v1.0.0
 bun install --production
 docker-compose up -d
 bun run dist/index.js

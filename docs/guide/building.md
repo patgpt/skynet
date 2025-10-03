@@ -80,21 +80,21 @@ bun run build
 
 ```bash
 # Create tarball
-tar -czf skynet-mcp-v1.0.0.tar.gz dist/ node_modules/ package.json
+tar -czf skynet-v1.0.0.tar.gz dist/ node_modules/ package.json
 
 # Or zip
-zip -r skynet-mcp-v1.0.0.zip dist/ node_modules/ package.json
+zip -r skynet-v1.0.0.zip dist/ node_modules/ package.json
 ```
 
 ### 3. Deploy to Server
 
 ```bash
 # Upload and extract
-scp skynet-mcp-v1.0.0.tar.gz server:/opt/skynet-mcp/
-ssh server "cd /opt/skynet-mcp && tar -xzf skynet-mcp-v1.0.0.tar.gz"
+scp skynet-v1.0.0.tar.gz server:/opt/skynet/
+ssh server "cd /opt/skynet && tar -xzf skynet-v1.0.0.tar.gz"
 
 # Install dependencies (if needed)
-ssh server "cd /opt/skynet-mcp && bun install --production"
+ssh server "cd /opt/skynet && bun install --production"
 ```
 
 ### 4. Configure MCP Client
@@ -107,7 +107,7 @@ Point your MCP client to the production bundle:
     "skynet": {
       "type": "stdio",
       "command": "bun",
-      "args": ["run", "/opt/skynet-mcp/dist/index.js"],
+      "args": ["run", "/opt/skynet/dist/index.js"],
       "env": {
         "NODE_ENV": "production",
         "MEMGRAPH_BOLT_URL": "bolt://memgraph:7687",
@@ -143,11 +143,11 @@ CMD ["bun", "run", "dist/index.js"]
 
 Build and run:
 ```bash
-docker build -t skynet-mcp:latest .
+docker build -t skynet:latest .
 docker run -it --rm \
   -e MEMGRAPH_BOLT_URL=bolt://host.docker.internal:7687 \
   -e CHROMA_URL=http://host.docker.internal:8000 \
-  skynet-mcp:latest
+  skynet:latest
 ```
 
 ## Environment Variables

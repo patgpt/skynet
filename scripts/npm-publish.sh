@@ -106,7 +106,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 # Confirm publish
-read -p "🚀 Publish @patgpt/skynet-mcp@${NEW_VERSION} to npm? [y/N] " -n 1 -r
+read -p "🚀 Publish @patgpt/skynet@${NEW_VERSION} to npm? [y/N] " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "❌ Publish cancelled"
@@ -118,14 +118,14 @@ echo ""
 echo "📤 Publishing to npm..."
 if npm publish --access public; then
     echo ""
-    echo "✅ Successfully published @patgpt/skynet-mcp@${NEW_VERSION}"
+    echo "✅ Successfully published @patgpt/skynet@${NEW_VERSION}"
     echo ""
     echo "Next steps:"
     echo "  1. Commit version change: git commit -am \"chore: release v${NEW_VERSION}\""
     echo "  2. Create tag: git tag -a v${NEW_VERSION} -m \"Release v${NEW_VERSION}\""
     echo "  3. Push: git push origin main --tags"
     echo ""
-    echo "📦 View on npm: https://www.npmjs.com/package/@patgpt/skynet-mcp"
+    echo "📦 View on npm: https://www.npmjs.com/package/@patgpt/skynet"
 else
     echo "❌ Publish failed"
     exit 1

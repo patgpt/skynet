@@ -99,21 +99,21 @@ bun run build
 
 #### From npm (recommended)
 ```bash
-npx @patgpt/skynet-mcp
+npx @patgpt/skynet
 ```
 
 #### From GitHub Packages
 ```bash
-npx --registry=https://npm.pkg.github.com @patgpt/skynet-mcp
+npx --registry=https://npm.pkg.github.com @patgpt/skynet
 ```
 
 #### Install globally
 ```bash
 # From npm
-npm install -g @patgpt/skynet-mcp
+npm install -g @patgpt/skynet
 
 # From GitHub Packages
-npm install -g --registry=https://npm.pkg.github.com @patgpt/skynet-mcp
+npm install -g --registry=https://npm.pkg.github.com @patgpt/skynet
 ```
 
 </details>
@@ -123,11 +123,11 @@ npm install -g --registry=https://npm.pkg.github.com @patgpt/skynet-mcp
 
 ```bash
 # Download latest release
-wget https://github.com/patgpt/skynet/releases/latest/download/skynet-mcp-v1.0.0.tar.gz
+wget https://github.com/patgpt/skynet/releases/latest/download/skynet-v1.0.0.tar.gz
 
 # Extract and install
-tar -xzf skynet-mcp-v1.0.0.tar.gz
-cd skynet-mcp-v1.0.0
+tar -xzf skynet-v1.0.0.tar.gz
+cd skynet-v1.0.0
 bun install --production
 docker-compose up -d
 bun run dist/index.js
@@ -410,15 +410,14 @@ CHROMA_URL=http://localhost:8000
 
 ### 🏷️ Creating a Release
 
-```bash
-# Option 1: Use the helper script
-./scripts/create-release.sh v1.0.0 "Initial release"
+**Automatic releases on every push to `main`:**
 
-# Option 2: Manual process
-bun run release              # Test and build
-git tag -a v1.0.0 -m "Release v1.0.0"
-git push origin v1.0.0       # Triggers CI release
-```
+1. Update version in `package.json`
+2. Commit and push to `main`
+3. CI automatically:
+   - Runs tests and builds
+   - Creates GitHub release with tag from package.json version
+   - Publishes to npm and GitHub Packages
 
 > 📘 **See [RELEASE.md](RELEASE.md) for detailed release instructions**
 

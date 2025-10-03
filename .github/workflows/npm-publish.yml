@@ -83,4 +83,4 @@ jobs:
                   echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
                   echo "" >> $GITHUB_STEP_SUMMARY
                   echo "📦 npm: https://www.npmjs.com/package/$(jq -r .name package.json)" >> $GITHUB_STEP_SUMMARY
-                  echo "📦 GitHub: https://github.com/patgpt/skynet/pkgs/npm/skynet-mcp" >> $GITHUB_STEP_SUMMARY
+                  echo "📦 GitHub: https://github.com/patgpt/skynet/pkgs/npm/skynet" >> $GITHUB_STEP_SUMMARY

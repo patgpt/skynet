@@ -1,5 +1,5 @@
 {
-	"name": "@patgpt/skynet-mcp",
+	"name": "@patgpt/skynet",
 	"version": "1.0.0",
 	"description": "Advanced Model Context Protocol server with persistent memory using Memgraph and ChromaDB",
 	"keywords": [
@@ -39,7 +39,7 @@
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"bin": {
-		"skynet-mcp": "./dist/index.js"
+		"skynet": "./dist/index.js"
 	},
 	"files": [
 		"dist",
