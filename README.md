@@ -1,6 +1,8 @@
+# Skynet MCP Server
+
 # <img src="./public/logo.png" alt="Skynet MCP Logo" width="120" align="left" />
 
-# Skynet MCP Server
+
 
 Advanced Model Context Protocol server with persistent memory using Memgraph (graph DB) and ChromaDB (vector DB).
 
