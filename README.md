@@ -1,39 +1,133 @@
-# Skynet MCP Server
+<div align="center">
 
-# <img src="./public/logo.png" alt="Skynet MCP Logo" width="120" align="left" />
+# 🌌 Skynet MCP Server
 
+<img src="./public/logo.png" alt="Skynet MCP Logo" width="200" />
 
+### *Advanced Model Context Protocol server with persistent memory*
 
-Advanced Model Context Protocol server with persistent memory using Memgraph (graph DB) and ChromaDB (vector DB).
+**Powered by Memgraph (Graph DB) 🔗 & ChromaDB (Vector DB) 🧠**
 
+---
 
-[![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://patgpt.github.io/skynet/)
-[![Tests](https://img.shields.io/badge/tests-passing-green)](#testing)
-[![Build Size](https://img.shields.io/badge/build-3.9MB-brightgreen)](#production)
-[![Release](https://img.shields.io/github/v/release/patgpt/skynet)](https://github.com/patgpt/skynet/releases)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Documentation](https://img.shields.io/badge/📚_docs-VitePress-5A67D8?style=for-the-badge)](https://patgpt.github.io/skynet/)
+[![Tests](https://img.shields.io/badge/✅_tests-passing-10B981?style=for-the-badge)](#testing)
+[![Build Size](https://img.shields.io/badge/📦_build-3.9MB-22C55E?style=for-the-badge)](#production)
+[![Release](https://img.shields.io/github/v/release/patgpt/skynet?style=for-the-badge&color=8B5CF6)](https://github.com/patgpt/skynet/releases)
+[![License](https://img.shields.io/badge/📄_license-MIT-3B82F6?style=for-the-badge)](LICENSE)
 
 <!-- Tech Stack Badges -->
 <p>
-	<a href="https://bun.sh"><img src="https://img.shields.io/badge/Bun-%2300B6FF.svg?logo=bun&logoColor=white" alt="Bun" /></a>
-	<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-%23007ACC.svg?logo=typescript&logoColor=white" alt="TypeScript" /></a>
-	<a href="https://biomejs.dev/"><img src="https://img.shields.io/badge/Biome-%2332C766.svg?logo=biome&logoColor=white" alt="Biome" /></a>
-	<a href="https://vitepress.dev/"><img src="https://img.shields.io/badge/VitePress-%23646CFF.svg?logo=vite&logoColor=white" alt="VitePress" /></a>
-	<a href="https://memgraph.com/"><img src="https://img.shields.io/badge/Memgraph-%2300B6FF.svg?logo=memgraph&logoColor=white" alt="Memgraph" /></a>
-	<a href="https://www.trychroma.com/"><img src="https://img.shields.io/badge/ChromaDB-%23FF6F61.svg?logo=chroma&logoColor=white" alt="ChromaDB" /></a>
+	<a href="https://bun.sh"><img src="https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white" alt="Bun" /></a>
+	<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=flat&logo=typescript&logoColor=white" alt="TypeScript" /></a>
+	<a href="https://biomejs.dev/"><img src="https://img.shields.io/badge/Biome-%2360A5FA.svg?style=flat&logo=biome&logoColor=white" alt="Biome" /></a>
+	<a href="https://vitepress.dev/"><img src="https://img.shields.io/badge/VitePress-%23646CFF.svg?style=flat&logo=vite&logoColor=white" alt="VitePress" /></a>
+	<a href="https://memgraph.com/"><img src="https://img.shields.io/badge/Memgraph-%23FB6E00.svg?style=flat&logoColor=white" alt="Memgraph" /></a>
+	<a href="https://www.trychroma.com/"><img src="https://img.shields.io/badge/ChromaDB-%23FF6F61.svg?style=flat&logoColor=white" alt="ChromaDB" /></a>
 </p>
+
+[🚀 Quick Start](#-quick-start) • [📖 Documentation](https://patgpt.github.io/skynet/) • [🛠️ Tools](#-tools-18-total) • [🤝 Contributing](CONTRIBUTING.md)
+
+</div>
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🧠 **Intelligent Memory**
+- Semantic search with ChromaDB
+- Graph-based relationships via Memgraph
+- Persistent conversation context
+
+</td>
+<td width="50%">
+
+### ⚡ **High Performance**
+- Built with Bun runtime
+- 3.9MB optimized bundle
+- Tree-shaking & minification
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🔧 **Developer Friendly**
+- 18 specialized MCP tools
+- Full TypeScript support
+- Comprehensive test coverage
+
+</td>
+<td width="50%">
+
+### 🐳 **Easy Deployment**
+- Docker Compose ready
+- One-command setup
+- GitHub Pages docs
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# 1️⃣ Install dependencies
+bun install
+
+# 2️⃣ Start databases (Docker required)
+docker-compose up -d
+
+# 3️⃣ Development with hot-reload
+bun dev
+
+# 4️⃣ Run tests
+bun test
+
+# 5️⃣ Build for production
+bun run build
+```
+
+<details>
+<summary>📦 <b>Installing from Release</b></summary>
+
+```bash
+# Download latest release
+wget https://github.com/patgpt/skynet/releases/latest/download/skynet-mcp-v1.0.0.tar.gz
+
+# Extract and install
+tar -xzf skynet-mcp-v1.0.0.tar.gz
+cd skynet-mcp-v1.0.0
+bun install --production
+docker-compose up -d
+bun run dist/index.js
+```
+
+</details>
+
+---
 
 ## 📚 Documentation
 
-Comprehensive documentation is available at [patgpt.github.io/skynet](https://patgpt.github.io/skynet/)
+> 📘 **Comprehensive documentation available at [patgpt.github.io/skynet](https://patgpt.github.io/skynet/)**
 
-**Quick Links:**
-- [Getting Started](https://patgpt.github.io/skynet/guide/)
-- [Architecture](https://patgpt.github.io/skynet/guide/architecture)
-- [API Reference](https://patgpt.github.io/skynet/api/)
-- [Tools Overview](https://patgpt.github.io/skynet/guide/tools)
+### 🔗 Quick Links
 
-### Local Documentation
+| Section | Description |
+|---------|-------------|
+| [🏁 Getting Started](https://patgpt.github.io/skynet/guide/) | Installation and first steps |
+| [🏗️ Architecture](https://patgpt.github.io/skynet/guide/architecture) | System design and workflows |
+| [📘 API Reference](https://patgpt.github.io/skynet/api/) | Complete API documentation |
+| [🛠️ Tools Overview](https://patgpt.github.io/skynet/guide/tools) | All 18 tools explained |
+
+<details>
+<summary>🖥️ <b>Local Documentation</b></summary>
 
 ```bash
 # Install dependencies
@@ -49,102 +143,156 @@ bun run docs:build
 bun run docs:api
 ```
 
-## Quick Start
+</details>
 
-```bash
-# Install dependencies
-bun install
+---
 
-# Start databases (Docker required)
-docker-compose up -d
+## 🛠️ Tools (18 total)
 
-# Development (hot-reload)
-bun dev
+<details open>
+<summary><b>🏗️ Infrastructure (3 tools)</b></summary>
 
-# Run tests
-bun test
+| Tool | Description |
+|------|-------------|
+| `stack_up` | 🚀 Start Memgraph & ChromaDB containers |
+| `stack_down` | 🛑 Stop containers gracefully |
+| `stack_status` | 📊 Check container health status |
 
-# Build for production
-bun run build
-```
+</details>
 
-## Project Structure
+<details open>
+<summary><b>💾 Database (4 tools)</b></summary>
+
+| Tool | Description |
+|------|-------------|
+| `graph_query` | 🔍 Execute Cypher queries on Memgraph |
+| `chroma_query` | 🔎 Semantic search in ChromaDB |
+| `chroma_add` | ➕ Add documents to ChromaDB |
+| `add` | ➗ Math utility (testing) |
+
+</details>
+
+<details open>
+<summary><b>🧠 Memory (2 tools)</b></summary>
+
+| Tool | Description |
+|------|-------------|
+| `memory_store` | 💾 Store semantic memories with metadata |
+| `memory_search` | 🔍 Search memories by semantic query |
+
+</details>
+
+<details open>
+<summary><b>👥 Interactions (6 tools)</b></summary>
+
+| Tool | Description |
+|------|-------------|
+| `interaction_store` | 📝 Store user interactions in graph |
+| `interaction_getContext` | 📜 Get user conversation history |
+| `interaction_findRelated` | 🔗 Find related interactions |
+| `user_getProfile` | 👤 Get/create user profile |
+| `graph_createRelationship` | 🔗 Link interactions together |
+| `analytics_getInsights` | 📊 Analyze conversation patterns |
+
+</details>
+
+<details open>
+<summary><b>🤖 Cognitive (3 tools)</b></summary>
+
+| Tool | Description |
+|------|-------------|
+| `skynet_think` | 💭 Process input & retrieve context |
+| `skynet_respond` | 💬 Store AI responses |
+| `skynet_validateMemory` | ✅ Validate memory storage |
+
+</details>
+
+> 📖 **See [Tools Overview](https://patgpt.github.io/skynet/guide/tools) for detailed documentation**
+
+---
+
+## 📁 Project Structure
 
 ```
 skynet/
-├── src/
-│   ├── index.ts              # Main entry point
-│   ├── types.ts              # TypeScript definitions
-│   ├── db/                   # Database clients
-│   │   ├── memgraph.ts       # Graph DB (Memgraph)
-│   │   ├── chroma.ts         # Vector DB (ChromaDB)
-│   │   └── docker.ts         # Docker client
-│   └── tools/                # MCP tool implementations
-│       ├── infrastructure.ts # Container management (3 tools)
-│       ├── database.ts       # DB access (4 tools)
-│       ├── memory.ts         # Semantic memory (2 tools)
-│       ├── interactions.ts   # User tracking (6 tools)
-│       └── cognitive.ts      # Skynet workflow (3 tools)
-├── tests/                    # Test suite (Bun)
-├── docs/                     # VitePress documentation
-│   ├── .vitepress/config.ts  # VitePress config
-│   ├── guide/                # User guides
-│   ├── api/                  # API reference
-│   └── api-generated/        # TypeDoc output
-└── dist/                     # Production build
+├── 📂 src/
+│   ├── 📄 index.ts              # Main entry point
+│   ├── 📄 types.ts              # TypeScript definitions
+│   ├── 📂 db/                   # Database clients
+│   │   ├── memgraph.ts          # Graph DB (Memgraph)
+│   │   ├── chroma.ts            # Vector DB (ChromaDB)
+│   │   └── docker.ts            # Docker client
+│   └── 📂 tools/                # MCP tool implementations
+│       ├── infrastructure.ts    # Container management (3 tools)
+│       ├── database.ts          # DB access (4 tools)
+│       ├── memory.ts            # Semantic memory (2 tools)
+│       ├── interactions.ts      # User tracking (6 tools)
+│       └── cognitive.ts         # Skynet workflow (3 tools)
+├── 📂 tests/                    # Test suite (Bun)
+├── 📂 docs/                     # VitePress documentation
+│   ├── .vitepress/config.ts     # VitePress config
+│   ├── guide/                   # User guides
+│   ├── api/                     # API reference
+│   └── api-generated/           # TypeDoc output
+└── 📂 dist/                     # Production build
 ```
 
-## Tools (18 total)
+---
 
-### Infrastructure (3 tools)
-- `stack_up` - Start Memgraph & ChromaDB containers
-- `stack_down` - Stop containers
-- `stack_status` - Check container status
+## 🏗️ Architecture
 
-### Database (4 tools)
-- `graph_query` - Execute Cypher queries on Memgraph
-- `chroma_query` - Semantic search in ChromaDB
-- `chroma_add` - Add documents to ChromaDB
-- `add` - Math utility (testing)
+```mermaid
+graph LR
+    A[User Query] --> B[skynet_think]
+    B --> C[Retrieve Context]
+    C --> D[Process Query]
+    D --> E[Generate Response]
+    E --> F[skynet_respond]
+    F --> G[Store Interaction]
+    G --> H[skynet_validateMemory]
+    H --> I[Verify Storage]
+```
 
-### Memory (2 tools)
-- `memory_store` - Store semantic memories with metadata
-- `memory_search` - Search memories by query
+### 🗄️ **Databases**
 
-### Interactions (6 tools)
-- `interaction_store` - Store user interactions in graph
-- `interaction_getContext` - Get user history
-- `interaction_findRelated` - Find related interactions
-- `user_getProfile` - Get/create user profile
-- `graph_createRelationship` - Link interactions
-- `analytics_getInsights` - Analyze conversation patterns
+| Database | Purpose | Port |
+|----------|---------|------|
+| **Memgraph** 🔗 | Graph database for interaction relationships | 7687 |
+| **ChromaDB** 🧠 | Vector database for semantic memory | 8000 |
 
-### Cognitive (3 tools)
-- `skynet_think` - Process input & retrieve context
-- `skynet_respond` - Store AI responses
-- `skynet_validateMemory` - Validate memory storage
+### 🔄 **Workflow**
 
-See [Tools Overview](https://patgpt.github.io/skynet/guide/tools) for detailed documentation.
+1. **User Query** → `skynet_think` (retrieve context)
+2. **Process** query with historical context
+3. **Generate** intelligent response
+4. **Store** → `skynet_respond` (save interaction)
+5. **Validate** → `skynet_validateMemory` (verify storage)
 
-## Development
+> 🔍 **See [Architecture Guide](https://patgpt.github.io/skynet/guide/architecture) for detailed diagrams**
+
+---
+
+## 💻 Development
 
 ```bash
-bun dev            # Hot-reload development
-bun test           # Run tests
-bun test:watch     # Watch mode
-bun run typecheck  # Type checking only
+bun dev            # 🔥 Hot-reload development
+bun test           # ✅ Run tests
+bun test:watch     # 👀 Watch mode
+bun run typecheck  # 🔍 Type checking only
 ```
 
-### Documentation Development
+### 📖 Documentation Development
 
 ```bash
-bun run docs:dev     # Start VitePress dev server
-bun run docs:build   # Build static site
-bun run docs:preview # Preview built site
-bun run docs:api     # Generate TypeDoc API docs
+bun run docs:dev     # 🌐 Start VitePress dev server
+bun run docs:build   # 🏗️ Build static site
+bun run docs:preview # 👁️ Preview built site
+bun run docs:api     # 📚 Generate TypeDoc API docs
 ```
 
-## Production
+---
+
+## 🚀 Production
 
 ```bash
 # Build optimized bundle
@@ -154,12 +302,15 @@ bun run build
 bun run dist/index.js
 ```
 
-**Build Optimization:**
-- Minified bundle: **3.9 MB** (60% reduction from 9.6 MB)
-- Tree-shaking enabled
-- External dependencies: `cohere-ai`, `@google/generative-ai`, `openai`
+### ⚡ Build Optimization
 
-## Testing
+- ✅ **Minified bundle:** 3.9 MB (60% reduction from 9.6 MB)
+- ✅ **Tree-shaking** enabled
+- ✅ **External dependencies:** `cohere-ai`, `@google/generative-ai`, `openai`
+
+---
+
+## 🧪 Testing
 
 ```bash
 bun test                    # Run all tests
@@ -167,14 +318,18 @@ bun test:watch              # Watch mode
 RUN_INTEGRATION=1 bun test  # Include integration tests
 ```
 
-**Test Coverage:**
-- ✅ 11 passing tests
-- ⏭️ 2 skipped (integration tests - require Docker)
-- 📁 6 test files covering all tool categories
+### 📊 Test Coverage
 
-## Deployment
+- ✅ **11 passing tests**
+- ⏭️ **2 skipped** (integration tests - require Docker)
+- 📁 **6 test files** covering all tool categories
 
-### GitHub Pages
+---
+
+## 🐳 Deployment
+
+<details>
+<summary><b>📄 GitHub Pages</b></summary>
 
 Documentation automatically deploys to GitHub Pages on push to `main`:
 
@@ -185,7 +340,10 @@ Documentation automatically deploys to GitHub Pages on push to `main`:
 - Deploy to gh-pages branch
 ```
 
-### Docker Deployment
+</details>
+
+<details>
+<summary><b>🐳 Docker Deployment</b></summary>
 
 ```bash
 # Using docker-compose
@@ -196,7 +354,14 @@ docker run -d -p 7687:7687 memgraph/memgraph:latest
 docker run -d -p 8000:8000 chromadb/chroma:latest
 ```
 
-## Environment Configuration
+</details>
+
+---
+
+## ⚙️ Environment Configuration
+
+<details>
+<summary>Click to expand environment variables</summary>
 
 Create `.env` (optional, defaults provided):
 
@@ -213,24 +378,13 @@ CHROMA_URL=http://localhost:8000
 # DOCKER_HOST=unix:///var/run/docker.sock
 ```
 
-## Architecture
+</details>
 
-**Databases:**
-- **Memgraph**: Graph database for interaction relationships
-- **ChromaDB**: Vector database for semantic memory
+---
 
-**Workflow:**
-1. User query → `skynet_think` (retrieve context)
-2. Process query with context
-3. Generate response
-4. `skynet_respond` (store interaction)
-5. `skynet_validateMemory` (verify storage)
+## 📦 Releases
 
-See [Architecture Guide](https://patgpt.github.io/skynet/guide/architecture) for details.
-
-## Releases
-
-### Creating a Release
+### 🏷️ Creating a Release
 
 ```bash
 # Option 1: Use the helper script
@@ -242,63 +396,88 @@ git tag -a v1.0.0 -m "Release v1.0.0"
 git push origin v1.0.0       # Triggers CI release
 ```
 
-See [RELEASE.md](RELEASE.md) for detailed release instructions.
+> 📘 **See [RELEASE.md](RELEASE.md) for detailed release instructions**
 
-### Installing from Release
+---
 
-```bash
-# Download latest release
-wget https://github.com/patgpt/skynet/releases/latest/download/skynet-mcp-v1.0.0.tar.gz
+## 🤝 Contributing
 
-# Extract and install
-tar -xzf skynet-mcp-v1.0.0.tar.gz
-cd skynet-mcp-v1.0.0
-bun install --production
-docker-compose up -d
-bun run dist/index.js
-```
-
-## Contributing
-
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+We welcome contributions! 🎉
 
 **Quick start:**
-1. Fork the repository
-2. Create a feature branch
-3. Write tests for changes
-4. Ensure all tests pass: `bun test`
-5. Submit pull request
 
-See our [contributors](CONTRIBUTORS.md) for a list of people who have helped make this project better.
+1. 🍴 Fork the repository
+2. 🌿 Create a feature branch
+3. ✍️ Write tests for changes
+4. ✅ Ensure all tests pass: `bun test`
+5. 📬 Submit pull request
 
+> 📖 **See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines**
 
-## Contributors
+---
 
-Special thanks to our core contributors:
+## 👥 Contributors
+
+Special thanks to our amazing contributors! 🙏
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <table>
 	<tr>
-		<td align="center"><a href="https://github.com/scottonanski"><img src="https://github.com/scottonanski.png" width="100px;" alt="scottonanski"/><br /><sub><b>scottonanski</b></sub></a><br /><span title="Code">💻</span> <span title="Docs">📖</span> <span title="Ideas">💡</span></td>
-		<td align="center"><a href="https://github.com/Saluana"><img src="https://github.com/Saluana.png" width="100px;" alt="Saluana"/><br /><sub><b>Saluana</b></sub></a><br /><span title="Code">💻</span> <span title="Docs">📖</span> <span title="Ideas">💡</span></td>
+		<td align="center">
+			<a href="https://github.com/scottonanski">
+				<img src="https://github.com/scottonanski.png" width="100px;" alt="scottonanski"/>
+				<br />
+				<sub><b>scottonanski</b></sub>
+			</a>
+			<br />
+			<span title="Code">💻</span>
+		</td>
+		<td align="center">
+			<a href="https://github.com/Saluana">
+				<img src="https://github.com/Saluana.png" width="100px;" alt="Saluana"/>
+				<br />
+				<sub><b>Saluana</b></sub>
+			</a>
+			<br />
+			<span title="Code">💻</span>
+		</td>
 	</tr>
 </table>
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full list of contributors.
-
-## License
-
-MIT - See [LICENSE](LICENSE) for details.
+> 📜 **See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full list of contributors**
 
 ---
 
-**Built with:**
-- [Bun](https://bun.sh) - Runtime & build tool
-- [FastMCP](https://github.com/jlowin/fastmcp) - MCP server framework
-- [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [VitePress](https://vitepress.dev/) - Documentation
-- [Memgraph](https://memgraph.com/) - Graph database
-- [ChromaDB](https://www.trychroma.com/) - Vector database
+## 📄 License
 
- 
+MIT License - See [LICENSE](LICENSE) for details.
+
+---
+
+## 🛠️ Built With
+
+<div align="center">
+
+| Technology | Purpose |
+|------------|---------|
+| [🟡 **Bun**](https://bun.sh) | Runtime & build tool |
+| [⚡ **FastMCP**](https://github.com/jlowin/fastmcp) | MCP server framework |
+| [🔷 **TypeScript**](https://www.typescriptlang.org/) | Type safety |
+| [📗 **VitePress**](https://vitepress.dev/) | Documentation |
+| [🔗 **Memgraph**](https://memgraph.com/) | Graph database |
+| [🧠 **ChromaDB**](https://www.trychroma.com/) | Vector database |
+
+</div>
+
+---
+
+<div align="center">
+
+**⭐ Star us on GitHub — it motivates us a lot!**
+
+Made with ❤️ by the Skynet team
+
+[Report Bug](https://github.com/patgpt/skynet/issues) • [Request Feature](https://github.com/patgpt/skynet/issues) • [Join Discussion](https://github.com/patgpt/skynet/discussions)
+
+</div>
