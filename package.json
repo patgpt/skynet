@@ -16,6 +16,16 @@
     "conversation-tracking"
   ],
   "author": "PatGPT",
+  "contributors": [
+    {
+      "name": "scottonanski",
+      "url": "https://github.com/scottonanski"
+    },
+    {
+      "name": "Saluana",
+      "url": "https://github.com/Saluana"
+    }
+  ],
   "license": "MIT",
   "homepage": "https://patgpt.github.io/skynet/",
   "repository": {

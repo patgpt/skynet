@@ -1,0 +1,40 @@
+{
+  "projectName": "patgpt-mcp",
+  "projectOwner": "patgpt",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md",
+    "CONTRIBUTORS.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "scottonanski",
+      "name": "scottonanski",
+      "avatar_url": "https://github.com/scottonanski.png",
+      "profile": "https://github.com/scottonanski",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas"
+      ]
+    },
+    {
+      "login": "Saluana",
+      "name": "Saluana",
+      "avatar_url": "https://github.com/Saluana.png",
+      "profile": "https://github.com/Saluana",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg)](#contributors)"
+}

@@ -246,16 +246,29 @@ bun run dist/index.js
 
 ## Contributing
 
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+**Quick start:**
 1. Fork the repository
 2. Create a feature branch
 3. Write tests for changes
 4. Ensure all tests pass: `bun test`
-5. Build documentation: `bun run docs:build`
-6. Submit pull request
+5. Submit pull request
+
+See our [contributors](CONTRIBUTORS.md) for a list of people who have helped make this project better.
+
+## Contributors
+
+Special thanks to our core contributors:
+
+- [@scottonanski](https://github.com/scottonanski)
+- [@Saluana](https://github.com/Saluana)
+
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full list of contributors.
 
 ## License
 
-MIT
+MIT - See [LICENSE](LICENSE) for details.
 
 ---
 
