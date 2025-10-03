@@ -1,13 +1,25 @@
- 
+# <img src="logo.png" alt="Skynet MCP Logo" width="120" align="left" />
+
 # Skynet MCP Server
 
 Advanced Model Context Protocol server with persistent memory using Memgraph (graph DB) and ChromaDB (vector DB).
+
 
 [![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://patgpt.github.io/skynet/)
 [![Tests](https://img.shields.io/badge/tests-passing-green)](#testing)
 [![Build Size](https://img.shields.io/badge/build-3.9MB-brightgreen)](#production)
 [![Release](https://img.shields.io/github/v/release/patgpt/skynet)](https://github.com/patgpt/skynet/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+<!-- Tech Stack Badges -->
+<p>
+	<a href="https://bun.sh"><img src="https://img.shields.io/badge/Bun-%2300B6FF.svg?logo=bun&logoColor=white" alt="Bun" /></a>
+	<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-%23007ACC.svg?logo=typescript&logoColor=white" alt="TypeScript" /></a>
+	<a href="https://biomejs.dev/"><img src="https://img.shields.io/badge/Biome-%2332C766.svg?logo=biome&logoColor=white" alt="Biome" /></a>
+	<a href="https://vitepress.dev/"><img src="https://img.shields.io/badge/VitePress-%23646CFF.svg?logo=vite&logoColor=white" alt="VitePress" /></a>
+	<a href="https://memgraph.com/"><img src="https://img.shields.io/badge/Memgraph-%2300B6FF.svg?logo=memgraph&logoColor=white" alt="Memgraph" /></a>
+	<a href="https://www.trychroma.com/"><img src="https://img.shields.io/badge/ChromaDB-%23FF6F61.svg?logo=chroma&logoColor=white" alt="ChromaDB" /></a>
+</p>
 
 ## 📚 Documentation
 
@@ -257,12 +269,19 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed gu
 
 See our [contributors](CONTRIBUTORS.md) for a list of people who have helped make this project better.
 
+
 ## Contributors
 
 Special thanks to our core contributors:
 
-- [@scottonanski](https://github.com/scottonanski)
-- [@Saluana](https://github.com/Saluana)
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<table>
+	<tr>
+		<td align="center"><a href="https://github.com/scottonanski"><img src="https://github.com/scottonanski.png" width="100px;" alt="scottonanski"/><br /><sub><b>scottonanski</b></sub></a><br /><span title="Code">💻</span> <span title="Docs">📖</span> <span title="Ideas">💡</span></td>
+		<td align="center"><a href="https://github.com/Saluana"><img src="https://github.com/Saluana.png" width="100px;" alt="Saluana"/><br /><sub><b>Saluana</b></sub></a><br /><span title="Code">💻</span> <span title="Docs">📖</span> <span title="Ideas">💡</span></td>
+	</tr>
+</table>
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full list of contributors.
 
