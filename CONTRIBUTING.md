@@ -25,7 +25,7 @@ This project follows a simple code of conduct:
 
 ### Reporting Bugs
 
-Before creating bug reports, please check the [issue tracker](https://github.com/patgpt/patgpt-mcp/issues) to avoid duplicates.
+Before creating bug reports, please check the [issue tracker](https://github.com/patgpt/skynet/issues) to avoid duplicates.
 
 When creating a bug report, use our [bug report template](.github/ISSUE_TEMPLATE/bug_report.yml) and include:
 
@@ -75,8 +75,8 @@ Unsure where to begin? Look for issues labeled:
 
 1. **Fork and Clone**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/patgpt-mcp.git
-   cd patgpt-mcp
+   git clone https://github.com/patgpt/skynet.git
+   cd skynet
    ```
 
 2. **Install Dependencies**
@@ -102,7 +102,7 @@ Unsure where to begin? Look for issues labeled:
 ### Project Structure
 
 ```
-patgpt-mcp/
+skynet/
 ├── src/
 │   ├── index.ts              # Main entry point
 │   ├── types.ts              # TypeScript definitions
@@ -336,8 +336,8 @@ If you're interested in the process, see [RELEASE.md](RELEASE.md).
 
 ## Getting Help
 
-- 📖 Read the [documentation](https://patgpt.github.io/patgpt-mcp/)
-- 💬 Start a [discussion](https://github.com/patgpt/patgpt-mcp/discussions)
+- 📖 Read the [documentation](https://patgpt.github.io/skynet/)
+- 💬 Start a [discussion](https://github.com/patgpt/skynet/discussions)
 - ❓ Open a [question issue](.github/ISSUE_TEMPLATE/question.yml)
 - 💡 Check existing issues and PRs
 

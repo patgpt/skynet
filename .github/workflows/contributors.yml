@@ -32,6 +32,14 @@ jobs:
                     echo "exists=false" >> $GITHUB_OUTPUT
                   fi
 
+            - name: Validate CONTRIBUTORS.md section
+              if: steps.check.outputs.exists == 'false'
+              run: |
+                  if ! grep -q '^## Core Team' CONTRIBUTORS.md; then
+                    echo "Error: '## Core Team' section not found in CONTRIBUTORS.md"
+                    exit 1
+                  fi
+
             - name: Add to CONTRIBUTORS.md
               if: steps.check.outputs.exists == 'false'
               run: |
