@@ -1,4 +1,4 @@
-# <img src="./logo.png" alt="Skynet MCP Logo" width="120" align="left" />
+# <img src="./public/logo.png" alt="Skynet MCP Logo" width="120" align="left" />
 
 # Skynet MCP Server
 
