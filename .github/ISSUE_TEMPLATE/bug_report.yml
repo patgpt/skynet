@@ -1,0 +1,124 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the form below.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Start MCP server with '...'
+        2. Call tool '...'
+        3. Pass parameters '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen
+      placeholder: The tool should return...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened
+      placeholder: Instead, it throws an error...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tool-category
+    attributes:
+      label: Tool Category
+      description: Which category of tools is affected?
+      options:
+        - Infrastructure (stack_up, stack_down, stack_status)
+        - Database (graph_query, chroma_query, chroma_add)
+        - Memory (memory_store, memory_search)
+        - Interactions (interaction_store, user_getProfile, etc.)
+        - Cognitive (skynet_think, skynet_respond, skynet_validateMemory)
+        - Other/Multiple
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Your environment details
+      value: |
+        - OS: [e.g., macOS 14.0, Ubuntu 22.04]
+        - Bun Version: [run `bun --version`]
+        - Skynet MCP Version: [e.g., v1.0.0]
+        - Docker Version: [run `docker --version`]
+        - Memgraph Status: [running/stopped]
+        - ChromaDB Status: [running/stopped]
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Include relevant error messages, stack traces, or logs
+      render: shell
+      placeholder: |
+        Paste error logs here
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: Relevant configuration (redact sensitive info)
+      render: json
+      placeholder: |
+        {
+          "MEMGRAPH_BOLT_URL": "bolt://localhost:7687",
+          "CHROMA_URL": "http://localhost:8000"
+        }
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify you've done the following
+      options:
+        - label: I've checked the [documentation](https://patgpt.github.io/patgpt-mcp/)
+          required: true
+        - label: I've searched for similar issues
+          required: true
+        - label: I'm using the latest version of Skynet MCP
+          required: false
+        - label: Docker containers are running (`docker ps`)
+          required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem
+      placeholder: Screenshots, related issues, attempted fixes, etc.

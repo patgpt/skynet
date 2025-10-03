@@ -1,11 +1,55 @@
 {
-  "name": "skynet",
+  "name": "@patgpt/skynet-mcp",
   "version": "1.0.0",
-  "module": "src/index.ts",
+  "description": "Advanced Model Context Protocol server with persistent memory using Memgraph and ChromaDB",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "memory",
+    "graph-database",
+    "vector-database",
+    "memgraph",
+    "chromadb",
+    "fastmcp",
+    "semantic-memory",
+    "conversation-tracking"
+  ],
+  "author": "PatGPT",
+  "license": "MIT",
+  "homepage": "https://patgpt.github.io/skynet/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patgpt/skynet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/patgpt/skynet/issues"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "skynet-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "docker-compose.yml"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
-  "private": true,
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target bun --minify --external cohere-ai --external @google/generative-ai --external openai",
+    "build": "bun build ./src/index.ts --outdir ./dist --target node --minify --external cohere-ai --external @google/generative-ai --external openai",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist",
+    "build:all": "bun run build && bun run build:types",
     "dev": "bun --hot src/index.ts",
     "test": "bun test",
     "test:watch": "bun test --watch",
@@ -14,7 +58,9 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "docs:api": "typedoc",
-    "release": "bun run build && bun test && echo 'Ready for release! Push a git tag to trigger release workflow.'"
+    "release": "bun run build:all && bun test && echo 'Ready for release! Push a git tag to trigger release workflow.'",
+    "prepublishOnly": "bun run build:all && bun test",
+    "pack:check": "npm pack --dry-run"
   },
   "devDependencies": {
     "@types/bun": "latest",

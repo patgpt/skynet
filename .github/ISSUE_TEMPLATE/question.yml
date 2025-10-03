@@ -1,0 +1,69 @@
+name: ❓ Question / Help
+description: Ask a question or get help using Skynet MCP
+title: "[Question]: "
+labels: ["question", "help wanted"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Need help? Ask your question below!
+
+        💡 **Tip**: Check the [documentation](https://patgpt.github.io/patgpt-mcp/) first!
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What do you need help with?
+      placeholder: How do I...?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What is your question about?
+      options:
+        - Installation/Setup
+        - Tool Usage
+        - Database Configuration
+        - Docker/Containers
+        - MCP Integration
+        - Performance
+        - Best Practices
+        - Troubleshooting
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What Have You Tried?
+      description: What have you already attempted?
+      placeholder: |
+        - I tried...
+        - I checked...
+        - I read...
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Relevant code, configuration, or environment details
+      render: typescript
+      placeholder: |
+        // Your code or config here
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I've checked the [documentation](https://patgpt.github.io/patgpt-mcp/)
+          required: true
+        - label: I've searched for similar questions/issues
+          required: true

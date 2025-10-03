@@ -1,0 +1,53 @@
+# Source files
+src/
+tests/
+
+# Documentation source
+docs/
+.vitepress/
+
+# Development
+.github/
+.vscode/
+scripts/
+
+# Build artifacts
+*.tsbuildinfo
+
+# Development configs
+tsconfig.json
+biome.json
+typedoc.json
+bun.lock
+
+# Guides
+RELEASE.md
+NPM_PUBLISH.md
+CONTRIBUTING.md
+DOCKER_SETUP.md
+GEMINI_SETUP.md
+USAGE.md
+fast-mcp.docs.md
+start-gemini.sh
+
+# Environment
+.env
+.env.*
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Test coverage
+coverage/
+*.lcov
+
+# Cache
+.cache/
+.eslintcache
+
+# IDE
+.idea/
+*.swp
+*.swo
