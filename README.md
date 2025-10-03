@@ -1,4 +1,4 @@
-````markdown
+ 
 # Skynet MCP Server
 
 Advanced Model Context Protocol server with persistent memory using Memgraph (graph DB) and ChromaDB (vector DB).
@@ -267,4 +267,4 @@ MIT
 - [Memgraph](https://memgraph.com/) - Graph database
 - [ChromaDB](https://www.trychroma.com/) - Vector database
 
-````
+ 
