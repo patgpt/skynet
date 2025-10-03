@@ -95,6 +95,30 @@ bun run build
 ```
 
 <details>
+<summary>📦 <b>Installing from npm / GitHub Packages</b></summary>
+
+#### From npm (recommended)
+```bash
+npx @patgpt/skynet-mcp
+```
+
+#### From GitHub Packages
+```bash
+npx --registry=https://npm.pkg.github.com @patgpt/skynet-mcp
+```
+
+#### Install globally
+```bash
+# From npm
+npm install -g @patgpt/skynet-mcp
+
+# From GitHub Packages
+npm install -g --registry=https://npm.pkg.github.com @patgpt/skynet-mcp
+```
+
+</details>
+
+<details>
 <summary>📦 <b>Installing from Release</b></summary>
 
 ```bash

@@ -53,7 +53,8 @@
 		"bun": ">=1.0.0"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+    "registry": "https://npm.pkg.github.com"
 	},
 	"type": "module",
 	"scripts": {
@@ -93,4 +94,6 @@
 		"sury": "^11.0.0-alpha.4",
 		"zod": "^3.23.8"
 	}
+ 
+ 
 }

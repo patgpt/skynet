@@ -1,12 +1,13 @@
 # NPM Publishing Guide for Skynet MCP
 
-This guide walks through publishing Skynet MCP to npm registry.
+This guide walks through publishing Skynet MCP to both npm registry and GitHub Packages.
 
 ## Prerequisites
 
 1. **npm Account**: Create one at [npmjs.com](https://www.npmjs.com/signup)
-2. **npm CLI Access**: Run `npm login` to authenticate
-3. **Package Name**: Check availability at [npmjs.com/package/skynet-mcp](https://www.npmjs.com/package/skynet-mcp)
+2. **GitHub Account**: With access to the patgpt organization
+3. **npm CLI Access**: Run `npm login` to authenticate
+4. **Package Name**: `@patgpt/skynet-mcp` (scoped package)
 
 ## 1. Configure package.json for npm
 
