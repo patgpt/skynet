@@ -6,16 +6,16 @@ import { FastMCP } from "fastmcp";
 import { registerInteractionTools } from "../src/tools/interactions";
 
 describe("Interaction Tools", () => {
-  let server: FastMCP;
+	let server: FastMCP;
 
-  beforeAll(() => {
-    server = new FastMCP({ name: "test-server", version: "1.0.0" });
-    registerInteractionTools(server);
-  });
+	beforeAll(() => {
+		server = new FastMCP({ name: "test-server", version: "1.0.0" });
+		registerInteractionTools(server);
+	});
 
-  test("should register interaction tools without errors", () => {
-    expect(server).toBeDefined();
-  });
+	test("should register interaction tools without errors", () => {
+		expect(server).toBeDefined();
+	});
 
-  // Integration tests would require running containers
+	// Integration tests would require running containers
 });

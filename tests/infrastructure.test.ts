@@ -7,18 +7,18 @@ import { FastMCP } from "fastmcp";
 import { registerInfrastructureTools } from "../src/tools/infrastructure";
 
 describe("Infrastructure Tools", () => {
-  let server: FastMCP;
+	let server: FastMCP;
 
-  beforeAll(() => {
-    server = new FastMCP({ name: "test-server", version: "1.0.0" });
-    registerInfrastructureTools(server);
-  });
+	beforeAll(() => {
+		server = new FastMCP({ name: "test-server", version: "1.0.0" });
+		registerInfrastructureTools(server);
+	});
 
-  test("should register infrastructure tools without errors", () => {
-    // Test passes if registration doesn't throw
-    expect(server).toBeDefined();
-  });
+	test("should register infrastructure tools without errors", () => {
+		// Test passes if registration doesn't throw
+		expect(server).toBeDefined();
+	});
 
-  // Note: Actual container operations are tested in integration tests
-  // to avoid disrupting the development environment
+	// Note: Actual container operations are tested in integration tests
+	// to avoid disrupting the development environment
 });

@@ -1,10 +1,10 @@
 /**
  * Skynet MCP Server
- * 
+ *
  * An advanced Model Context Protocol server with persistent memory and autonomous learning.
  * Combines graph database (Memgraph) for relationship tracking and vector database (Chroma)
  * for semantic memory storage.
- * 
+ *
  * @module skynet-mcp
  * @version 1.0.0
  */
@@ -21,8 +21,8 @@ import { registerCognitiveTools } from "./tools/cognitive.js";
  * Exposes tools and prompts for AI interaction with persistent memory.
  */
 const server = new FastMCP({
-  name: "Skynet",
-  version: "1.0.0",
+	name: "Skynet",
+	version: "1.0.0",
 });
 
 // Register all tool categories

@@ -10,7 +10,7 @@ const chromaUrl = new URL(process.env.CHROMA_URL ?? "http://localhost:8000");
  * Used for storing and querying embeddings of memories, insights, and knowledge.
  */
 export const chroma = new ChromaClient({
-  path: chromaUrl.toString(),
+	path: chromaUrl.toString(),
 });
 
 /**

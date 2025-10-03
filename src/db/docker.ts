@@ -8,9 +8,9 @@ import Docker from "dockerode";
  * Automatically detects Windows (named pipe) vs Unix (socket) Docker daemon.
  */
 export const docker = new Docker(
-  process.platform === "win32"
-    ? { host: process.env.DOCKER_HOST ?? "npipe:////./pipe/docker_engine" }
-    : { socketPath: "/var/run/docker.sock" }
+	process.platform === "win32"
+		? { host: process.env.DOCKER_HOST ?? "npipe:////./pipe/docker_engine" }
+		: { socketPath: "/var/run/docker.sock" },
 );
 
 /**
@@ -22,14 +22,14 @@ export const NETWORK_NAME = "mcp-local-net";
  * Container names
  */
 export const CONTAINERS = {
-  MEMGRAPH: "mcp-memgraph",
-  CHROMA: "mcp-chroma",
+	MEMGRAPH: "mcp-memgraph",
+	CHROMA: "mcp-chroma",
 } as const;
 
 /**
  * Volume names
  */
 export const VOLUMES = {
-  MEMGRAPH: "memgraph-data",
-  CHROMA: "chroma-data",
+	MEMGRAPH: "memgraph-data",
+	CHROMA: "chroma-data",
 } as const;

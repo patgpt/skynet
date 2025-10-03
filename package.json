@@ -1,96 +1,96 @@
 {
-  "name": "@patgpt/skynet-mcp",
-  "version": "1.0.0",
-  "description": "Advanced Model Context Protocol server with persistent memory using Memgraph and ChromaDB",
-  "keywords": [
-    "mcp",
-    "model-context-protocol",
-    "ai",
-    "memory",
-    "graph-database",
-    "vector-database",
-    "memgraph",
-    "chromadb",
-    "fastmcp",
-    "semantic-memory",
-    "conversation-tracking"
-  ],
-  "author": "PatGPT",
-  "contributors": [
-    {
-      "name": "scottonanski",
-      "url": "https://github.com/scottonanski"
-    },
-    {
-      "name": "Saluana",
-      "url": "https://github.com/Saluana"
-    }
-  ],
-  "license": "MIT",
-  "homepage": "https://patgpt.github.io/skynet/",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/patgpt/skynet.git"
-  },
-  "bugs": {
-    "url": "https://github.com/patgpt/skynet/issues"
-  },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "bin": {
-    "skynet-mcp": "./dist/index.js"
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md",
-    "docker-compose.yml"
-  ],
-  "engines": {
-    "node": ">=18.0.0",
-    "bun": ">=1.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "type": "module",
-  "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target node --minify --external cohere-ai --external @google/generative-ai --external openai",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist",
-    "build:all": "bun run build && bun run build:types",
-    "dev": "bun --hot src/index.ts",
-    "test": "bun test",
-    "test:watch": "bun test --watch",
-    "typecheck": "tsc --noEmit",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    "docs:api": "typedoc",
-    "release": "bun run build:all && bun test && echo 'Ready for release! Push a git tag to trigger release workflow.'",
-    "prepublishOnly": "bun run build:all && bun test",
-    "pack:check": "npm pack --dry-run"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "typedoc": "^0.28.13",
-    "typedoc-plugin-markdown": "^4.9.0",
-    "vitepress": "^1.6.4"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "@chroma-core/default-embed": "^0.1.8",
-    "@types/dockerode": "^3.3.44",
-    "@valibot/to-json-schema": "^1.3.0",
-    "chromadb": "^3.0.17",
-    "dockerode": "^4.0.9",
-    "effect": "^3.18.1",
-    "fastmcp": "^3.19.0",
-    "neo4j-driver": "^6.0.0",
-    "sury": "^11.0.0-alpha.4",
-    "zod": "^3.23.8"
-  }
+	"name": "@patgpt/skynet-mcp",
+	"version": "1.0.0",
+	"description": "Advanced Model Context Protocol server with persistent memory using Memgraph and ChromaDB",
+	"keywords": [
+		"mcp",
+		"model-context-protocol",
+		"ai",
+		"memory",
+		"graph-database",
+		"vector-database",
+		"memgraph",
+		"chromadb",
+		"fastmcp",
+		"semantic-memory",
+		"conversation-tracking"
+	],
+	"author": "PatGPT",
+	"contributors": [
+		{
+			"name": "scottonanski",
+			"url": "https://github.com/scottonanski"
+		},
+		{
+			"name": "Saluana",
+			"url": "https://github.com/Saluana"
+		}
+	],
+	"license": "MIT",
+	"homepage": "https://patgpt.github.io/skynet/",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/patgpt/skynet.git"
+	},
+	"bugs": {
+		"url": "https://github.com/patgpt/skynet/issues"
+	},
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"bin": {
+		"skynet-mcp": "./dist/index.js"
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE",
+		"CHANGELOG.md",
+		"docker-compose.yml"
+	],
+	"engines": {
+		"node": ">=18.0.0",
+		"bun": ">=1.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "bun build ./src/index.ts --outdir ./dist --target node --minify --external cohere-ai --external @google/generative-ai --external openai",
+		"build:types": "tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist",
+		"build:all": "bun run build && bun run build:types",
+		"dev": "bun --hot src/index.ts",
+		"test": "bun test",
+		"test:watch": "bun test --watch",
+		"typecheck": "tsc --noEmit",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs",
+		"docs:preview": "vitepress preview docs",
+		"docs:api": "typedoc",
+		"release": "bun run build:all && bun test && echo 'Ready for release! Push a git tag to trigger release workflow.'",
+		"prepublishOnly": "bun run build:all && bun test",
+		"pack:check": "npm pack --dry-run"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"typedoc": "^0.28.13",
+		"typedoc-plugin-markdown": "^4.9.0",
+		"vitepress": "^1.6.4"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@chroma-core/default-embed": "^0.1.8",
+		"@types/dockerode": "^3.3.44",
+		"@valibot/to-json-schema": "^1.3.0",
+		"chromadb": "^3.0.17",
+		"dockerode": "^4.0.9",
+		"effect": "^3.18.1",
+		"fastmcp": "^3.19.0",
+		"neo4j-driver": "^6.0.0",
+		"sury": "^11.0.0-alpha.4",
+		"zod": "^3.23.8"
+	}
 }
