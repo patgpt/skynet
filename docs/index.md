@@ -1,6 +1,5 @@
 ---
 layout: home
-
   name: "Skynet MCP"
   text: "Persistent Memory for AI"
   tagline: Advanced Model Context Protocol server with dual database architecture
