@@ -1,10 +1,10 @@
 {
  
         "mcpServers": {
-          "patgpt-mcp": {
+          "skynet": {
             "command": "bun",
             "args": ["run", "index.ts"],
-            "cwd": "/Users/wavefunction/dev/patgpt-mcp",
+            "cwd": "/Users/wavefunction/dev/skynet",
             "env": {
               "MEMGRAPH_HOST": "localhost",
               "MEMGRAPH_PORT": "7687",
@@ -18,7 +18,7 @@
    
       },
       "chat.mcp.serverSampling": {
-        "patgpt-mcp/.vscode/mcp.json: skynet": {
+        "skynet/.vscode/mcp.json: skynet": {
           "allowedModels": [
             "copilot/gpt-4.1",
             "copilot/claude-3.5-sonnet",

@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "patgpt-mcp",
+      "name": "skynet",
       "dependencies": {
         "@chroma-core/default-embed": "^0.1.8",
         "@types/dockerode": "^3.3.44",

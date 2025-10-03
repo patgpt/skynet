@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'Skynet MCP Server',
   description: 'Advanced Model Context Protocol server with persistent memory',
-  base: '/patgpt-mcp/',
+  base: '/skynet/',
   
   themeConfig: {
     nav: [
@@ -28,6 +28,7 @@ export default defineConfig({
             { text: 'Setup', link: '/guide/setup' },
             { text: 'Testing', link: '/guide/testing' },
             { text: 'Building', link: '/guide/building' },
+            { text: 'Releases', link: '/guide/releases' },
           ]
         }
       ],
@@ -53,7 +54,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/patgpt/patgpt-mcp' }
+      { icon: 'github', link: 'https://github.com/patgpt/skynet' }
     ],
 
     footer: {

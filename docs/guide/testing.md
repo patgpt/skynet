@@ -158,4 +158,4 @@ test("debug example", () => {
 
 - [Building for Production](/guide/building)
 - [API Reference](/api/)
-- [Contributing Guide](https://github.com/yourusername/patgpt-mcp/CONTRIBUTING.md)
+- [Contributing Guide](https://patgpt/skynet/CONTRIBUTING.md)

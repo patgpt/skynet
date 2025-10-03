@@ -11,8 +11,8 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/patgpt-mcp.git
-cd patgpt-mcp
+git clone https://patgpt/skynet.git
+cd skynet
 ```
 
 ### 2. Install Dependencies
@@ -86,7 +86,7 @@ Add to `.vscode/mcp.json` or your MCP client configuration:
       "type": "stdio",
       "command": "bun",
       "args": ["run", "dist/index.js"],
-      "cwd": "/path/to/patgpt-mcp",
+      "cwd": "/path/to/skynet",
       "env": {
         "MEMGRAPH_BOLT_URL": "bolt://localhost:7687",
         "CHROMA_URL": "http://localhost:8000"

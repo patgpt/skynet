@@ -4,7 +4,7 @@
       "type": "stdio",
       "command": "bun",
       "args": ["run", "dist/index.js"],
-      "cwd": "/Users/wavefunction/dev/patgpt-mcp",
+      "cwd": "/Users/wavefunction/dev/skynet",
       "env": {
         "MEMGRAPH_HOST": "localhost",
         "MEMGRAPH_PORT": "7687",

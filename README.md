@@ -3,19 +3,21 @@
 
 Advanced Model Context Protocol server with persistent memory using Memgraph (graph DB) and ChromaDB (vector DB).
 
-[![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://patgpt.github.io/patgpt-mcp/)
+[![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://patgpt.github.io/skynet/)
 [![Tests](https://img.shields.io/badge/tests-passing-green)](#testing)
 [![Build Size](https://img.shields.io/badge/build-3.9MB-brightgreen)](#production)
+[![Release](https://img.shields.io/github/v/release/patgpt/skynet)](https://github.com/patgpt/skynet/releases)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## 📚 Documentation
 
-Comprehensive documentation is available at [patgpt.github.io/patgpt-mcp](https://patgpt.github.io/patgpt-mcp/)
+Comprehensive documentation is available at [patgpt.github.io/skynet](https://patgpt.github.io/skynet/)
 
 **Quick Links:**
-- [Getting Started](https://patgpt.github.io/patgpt-mcp/guide/)
-- [Architecture](https://patgpt.github.io/patgpt-mcp/guide/architecture)
-- [API Reference](https://patgpt.github.io/patgpt-mcp/api/)
-- [Tools Overview](https://patgpt.github.io/patgpt-mcp/guide/tools)
+- [Getting Started](https://patgpt.github.io/skynet/guide/)
+- [Architecture](https://patgpt.github.io/skynet/guide/architecture)
+- [API Reference](https://patgpt.github.io/skynet/api/)
+- [Tools Overview](https://patgpt.github.io/skynet/guide/tools)
 
 ### Local Documentation
 
@@ -55,7 +57,7 @@ bun run build
 ## Project Structure
 
 ```
-patgpt-mcp/
+skynet/
 ├── src/
 │   ├── index.ts              # Main entry point
 │   ├── types.ts              # TypeScript definitions
@@ -108,7 +110,7 @@ patgpt-mcp/
 - `skynet_respond` - Store AI responses
 - `skynet_validateMemory` - Validate memory storage
 
-See [Tools Overview](https://patgpt.github.io/patgpt-mcp/guide/tools) for detailed documentation.
+See [Tools Overview](https://patgpt.github.io/skynet/guide/tools) for detailed documentation.
 
 ## Development
 
@@ -210,7 +212,37 @@ CHROMA_URL=http://localhost:8000
 4. `skynet_respond` (store interaction)
 5. `skynet_validateMemory` (verify storage)
 
-See [Architecture Guide](https://patgpt.github.io/patgpt-mcp/guide/architecture) for details.
+See [Architecture Guide](https://patgpt.github.io/skynet/guide/architecture) for details.
+
+## Releases
+
+### Creating a Release
+
+```bash
+# Option 1: Use the helper script
+./scripts/create-release.sh v1.0.0 "Initial release"
+
+# Option 2: Manual process
+bun run release              # Test and build
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0       # Triggers CI release
+```
+
+See [RELEASE.md](RELEASE.md) for detailed release instructions.
+
+### Installing from Release
+
+```bash
+# Download latest release
+wget https://github.com/patgpt/skynet/releases/latest/download/skynet-mcp-v1.0.0.tar.gz
+
+# Extract and install
+tar -xzf skynet-mcp-v1.0.0.tar.gz
+cd skynet-mcp-v1.0.0
+bun install --production
+docker-compose up -d
+bun run dist/index.js
+```
 
 ## Contributing
 

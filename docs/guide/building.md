@@ -263,6 +263,6 @@ docker stats mcp-memgraph mcp-chroma
 
 ## Next Steps
 
-- [Deployment Guide](https://github.com/yourusername/patgpt-mcp/DEPLOYMENT.md)
+- [Deployment Guide](https://patgpt/skynet/DEPLOYMENT.md)
 - [API Reference](/api/)
 - [Architecture Overview](/guide/architecture)
