@@ -42,6 +42,12 @@ export default defineConfig({
             { text: 'Interaction Tools', link: '/api/interactions' },
             { text: 'Cognitive Tools', link: '/api/cognitive' },
           ]
+        },
+        {
+          text: 'Generated API Docs',
+          items: [
+            { text: 'TypeDoc Reference', link: '/api-generated/' },
+          ]
         }
       ]
     },

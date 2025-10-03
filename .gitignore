@@ -6,6 +6,11 @@ out
 dist
 *.tgz
 
+# documentation build
+docs/.vitepress/dist
+docs/.vitepress/cache
+docs/api-generated
+
 # code coverage
 coverage
 *.lcov

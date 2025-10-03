@@ -1,12 +1,46 @@
+````markdown
 # Skynet MCP Server
 
 Advanced Model Context Protocol server with persistent memory using Memgraph (graph DB) and ChromaDB (vector DB).
+
+[![Documentation](https://img.shields.io/badge/docs-VitePress-blue)](https://patgpt.github.io/patgpt-mcp/)
+[![Tests](https://img.shields.io/badge/tests-passing-green)](#testing)
+[![Build Size](https://img.shields.io/badge/build-3.9MB-brightgreen)](#production)
+
+## 📚 Documentation
+
+Comprehensive documentation is available at [patgpt.github.io/patgpt-mcp](https://patgpt.github.io/patgpt-mcp/)
+
+**Quick Links:**
+- [Getting Started](https://patgpt.github.io/patgpt-mcp/guide/)
+- [Architecture](https://patgpt.github.io/patgpt-mcp/guide/architecture)
+- [API Reference](https://patgpt.github.io/patgpt-mcp/api/)
+- [Tools Overview](https://patgpt.github.io/patgpt-mcp/guide/tools)
+
+### Local Documentation
+
+```bash
+# Install dependencies
+bun install
+
+# Run documentation locally
+bun run docs:dev
+
+# Build documentation
+bun run docs:build
+
+# Generate TypeDoc API docs
+bun run docs:api
+```
 
 ## Quick Start
 
 ```bash
 # Install dependencies
 bun install
+
+# Start databases (Docker required)
+docker-compose up -d
 
 # Development (hot-reload)
 bun dev
@@ -20,79 +54,185 @@ bun run build
 
 ## Project Structure
 
-- `src/` - Source code
-  - `index.ts` - Main entry point
-  - `types.ts` - TypeScript definitions
-  - `db/` - Database clients (Memgraph, ChromaDB, Docker)
-  - `tools/` - MCP tool implementations
-    - `infrastructure.ts` - Container management
-    - `database.ts` - DB access tools
-    - `memory.ts` - Semantic memory storage
-    - `interactions.ts` - Interaction tracking
-    - `cognitive.ts` - Skynet cognitive workflow
-- `tests/` - Test suite (Bun test runner)
-- `dist/` - Production build output
+```
+patgpt-mcp/
+├── src/
+│   ├── index.ts              # Main entry point
+│   ├── types.ts              # TypeScript definitions
+│   ├── db/                   # Database clients
+│   │   ├── memgraph.ts       # Graph DB (Memgraph)
+│   │   ├── chroma.ts         # Vector DB (ChromaDB)
+│   │   └── docker.ts         # Docker client
+│   └── tools/                # MCP tool implementations
+│       ├── infrastructure.ts # Container management (3 tools)
+│       ├── database.ts       # DB access (4 tools)
+│       ├── memory.ts         # Semantic memory (2 tools)
+│       ├── interactions.ts   # User tracking (6 tools)
+│       └── cognitive.ts      # Skynet workflow (3 tools)
+├── tests/                    # Test suite (Bun)
+├── docs/                     # VitePress documentation
+│   ├── .vitepress/config.ts  # VitePress config
+│   ├── guide/                # User guides
+│   ├── api/                  # API reference
+│   └── api-generated/        # TypeDoc output
+└── dist/                     # Production build
+```
 
-## Tools
+## Tools (18 total)
 
-**Infrastructure** (3 tools)
-- `stack_up` - Start Docker containers
-- `stack_down` - Stop Docker containers
+### Infrastructure (3 tools)
+- `stack_up` - Start Memgraph & ChromaDB containers
+- `stack_down` - Stop containers
 - `stack_status` - Check container status
 
-**Database** (4 tools)
-- `graph_query` - Execute Cypher queries
-- `chroma_query` - Semantic search
-- `chroma_add` - Add documents
-- `add` - Simple addition (testing)
+### Database (4 tools)
+- `graph_query` - Execute Cypher queries on Memgraph
+- `chroma_query` - Semantic search in ChromaDB
+- `chroma_add` - Add documents to ChromaDB
+- `add` - Math utility (testing)
 
-**Memory** (2 tools)
-- `memory_store` - Store semantic memories
-- `memory_search` - Search memories
+### Memory (2 tools)
+- `memory_store` - Store semantic memories with metadata
+- `memory_search` - Search memories by query
 
-**Interactions** (6 tools)
-- `interaction_store` - Store interaction
+### Interactions (6 tools)
+- `interaction_store` - Store user interactions in graph
 - `interaction_getContext` - Get user history
 - `interaction_findRelated` - Find related interactions
-- `user_getProfile` - Get user profile
+- `user_getProfile` - Get/create user profile
 - `graph_createRelationship` - Link interactions
-- `analytics_getInsights` - Analyze patterns
+- `analytics_getInsights` - Analyze conversation patterns
 
-**Cognitive** (3 tools)
-- `skynet_think` - Process user input
-- `skynet_respond` - Store AI response
-- `skynet_validateMemory` - Validate storage
+### Cognitive (3 tools)
+- `skynet_think` - Process input & retrieve context
+- `skynet_respond` - Store AI responses
+- `skynet_validateMemory` - Validate memory storage
 
-**Total: 18 tools**
+See [Tools Overview](https://patgpt.github.io/patgpt-mcp/guide/tools) for detailed documentation.
 
 ## Development
 
 ```bash
-bun dev          # Hot-reload development
-bun test         # Run tests
-bun test:watch   # Watch mode
-bun run typecheck # Type checking only
+bun dev            # Hot-reload development
+bun test           # Run tests
+bun test:watch     # Watch mode
+bun run typecheck  # Type checking only
+```
+
+### Documentation Development
+
+```bash
+bun run docs:dev     # Start VitePress dev server
+bun run docs:build   # Build static site
+bun run docs:preview # Preview built site
+bun run docs:api     # Generate TypeDoc API docs
 ```
 
 ## Production
 
 ```bash
-bun run build    # Build optimized bundle (3.9MB)
-bun run dist/index.js # Run production build
+# Build optimized bundle
+bun run build
+
+# Run production build
+bun run dist/index.js
 ```
+
+**Build Optimization:**
+- Minified bundle: **3.9 MB** (60% reduction from 9.6 MB)
+- Tree-shaking enabled
+- External dependencies: `cohere-ai`, `@google/generative-ai`, `openai`
 
 ## Testing
 
-- Unit tests for tool registration
-- Integration tests for Docker operations
-- All tests use Bun's native test runner
+```bash
+bun test                    # Run all tests
+bun test:watch              # Watch mode
+RUN_INTEGRATION=1 bun test  # Include integration tests
+```
 
+**Test Coverage:**
+- ✅ 11 passing tests
+- ⏭️ 2 skipped (integration tests - require Docker)
+- 📁 6 test files covering all tool categories
+
+## Deployment
+
+### GitHub Pages
+
+Documentation automatically deploys to GitHub Pages on push to `main`:
+
+```yaml
+# .github/workflows/docs.yml
+- Build VitePress site
+- Generate TypeDoc API docs
+- Deploy to gh-pages branch
 ```
-✓ 11 passing tests
-✓ 2 skipped (integration)
-✓ 6 test files
+
+### Docker Deployment
+
+```bash
+# Using docker-compose
+docker-compose up -d
+
+# Or manually
+docker run -d -p 7687:7687 memgraph/memgraph:latest
+docker run -d -p 8000:8000 chromadb/chroma:latest
 ```
+
+## Environment Configuration
+
+Create `.env` (optional, defaults provided):
+
+```bash
+# Memgraph
+MEMGRAPH_BOLT_URL=bolt://localhost:7687
+MEMGRAPH_USER=
+MEMGRAPH_PASS=
+
+# ChromaDB
+CHROMA_URL=http://localhost:8000
+
+# Docker (if non-standard)
+# DOCKER_HOST=unix:///var/run/docker.sock
+```
+
+## Architecture
+
+**Databases:**
+- **Memgraph**: Graph database for interaction relationships
+- **ChromaDB**: Vector database for semantic memory
+
+**Workflow:**
+1. User query → `skynet_think` (retrieve context)
+2. Process query with context
+3. Generate response
+4. `skynet_respond` (store interaction)
+5. `skynet_validateMemory` (verify storage)
+
+See [Architecture Guide](https://patgpt.github.io/patgpt-mcp/guide/architecture) for details.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Write tests for changes
+4. Ensure all tests pass: `bun test`
+5. Build documentation: `bun run docs:build`
+6. Submit pull request
+
+## License
+
+MIT
 
 ---
 
-Built with [Bun](https://bun.sh) + [FastMCP](https://github.com/jlowin/fastmcp) + TypeScript
+**Built with:**
+- [Bun](https://bun.sh) - Runtime & build tool
+- [FastMCP](https://github.com/jlowin/fastmcp) - MCP server framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [VitePress](https://vitepress.dev/) - Documentation
+- [Memgraph](https://memgraph.com/) - Graph database
+- [ChromaDB](https://www.trychroma.com/) - Vector database
+
+````
