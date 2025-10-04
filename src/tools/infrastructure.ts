@@ -10,7 +10,7 @@
 import type { FastMCP } from "fastmcp";
 import { z } from "zod";
 import { config } from "../config.js";
-import { CONTAINERS, docker, NETWORK_NAME, VOLUMES } from "../db/docker.js";
+import { docker } from "../db/docker.js";
 import { formatErrorMessage } from "../utils/errors.js";
 import { formatTextOrJson } from "../utils/format.js";
 import { generateId } from "../utils/id.js";
@@ -19,10 +19,13 @@ import { outputFormatSchema } from "../utils/schemas.js";
 // Helper functions extracted for testability and reusability
 export async function ensureNetwork(): Promise<void> {
 	const nets = await docker.listNetworks({
-		filters: { name: [NETWORK_NAME] },
+		filters: { name: [config.docker.network] },
 	});
 	if (!nets.length) {
-		await docker.createNetwork({ Name: NETWORK_NAME, Driver: "bridge" });
+		await docker.createNetwork({
+			Name: config.docker.network,
+			Driver: "bridge",
+		});
 	}
 }
 
@@ -72,7 +75,7 @@ export async function startContainer(
 				ExposedPorts: Object.fromEntries(
 					ports.map((p) => [`${p.container}/tcp`, {}]),
 				),
-				NetworkingConfig: { EndpointsConfig: { [NETWORK_NAME]: {} } },
+				NetworkingConfig: { EndpointsConfig: { [config.docker.network]: {} } },
 			});
 		}
 		const info = await c.inspect();
@@ -87,7 +90,13 @@ export async function startContainer(
 export async function stopAndRemoveContainer(
 	name: string,
 	force = true,
+	confirm = false,
 ): Promise<boolean> {
+	if (!confirm) {
+		throw new Error(
+			"Destructive action: explicit confirmation required to remove container.",
+		);
+	}
 	try {
 		const container = docker.getContainer(name);
 		await container.inspect();
@@ -157,17 +166,17 @@ export function registerInfrastructureTools(server: FastMCP) {
 			try {
 				await ensureNetwork();
 				await Promise.all([
-					ensureVolume(VOLUMES.memgraph),
-					ensureVolume(VOLUMES.chroma),
+					ensureVolume(config.docker.volumes.memgraph),
+					ensureVolume(config.docker.volumes.chroma),
 				]);
 
 				await startContainer(
-					CONTAINERS.memgraph,
+					config.docker.containers.memgraph,
 					memgraphImage,
 					[{ host: memgraphPort, container: 7687 }],
 					[
 						{
-							source: VOLUMES.memgraph,
+							source: config.docker.volumes.memgraph,
 							target: "/var/lib/memgraph",
 							type: "volume",
 						},
@@ -175,10 +184,16 @@ export function registerInfrastructureTools(server: FastMCP) {
 				);
 
 				await startContainer(
-					CONTAINERS.chroma,
+					config.docker.containers.chroma,
 					chromaImage,
 					[{ host: chromaPort, container: 8000 }],
-					[{ source: VOLUMES.chroma, target: "/data", type: "volume" }],
+					[
+						{
+							source: config.docker.volumes.chroma,
+							target: "/data",
+							type: "volume",
+						},
+					],
 					[
 						"CHROMA_SERVER_HOST=0.0.0.0",
 						`CHROMA_SERVER_HTTP_PORT=${chromaPort}`,
@@ -192,8 +207,8 @@ export function registerInfrastructureTools(server: FastMCP) {
 					"✅ Docker stack started successfully",
 					`- Memgraph: ${memgraphImage} on port ${memgraphPort}`,
 					`- Chroma: ${chromaImage} on port ${chromaPort}`,
-					`- Network: ${NETWORK_NAME}`,
-					`- Volumes: ${VOLUMES.memgraph}, ${VOLUMES.chroma}`,
+					`- Network: ${config.docker.network}`,
+					`- Volumes: ${config.docker.volumes.memgraph}, ${config.docker.volumes.chroma}`,
 				].join("\n");
 			} catch (error) {
 				return [
@@ -231,12 +246,12 @@ export function registerInfrastructureTools(server: FastMCP) {
 			const requestId = generateId("stack_down");
 			const targetKeys: ContainerKey[] =
 				containers === "all" ? [...containerKeys] : containers;
-			const targets = targetKeys.map((name) => CONTAINERS[name]);
+			const targets = targetKeys.map((name) => config.docker.containers[name]);
 
 			try {
 				const results = await Promise.all(
 					targets.map((containerName) =>
-						stopAndRemoveContainer(containerName, force),
+						stopAndRemoveContainer(containerName, force, true),
 					),
 				);
 				const removed = targets.filter((_, index) => results[index]);
@@ -276,8 +291,12 @@ export function registerInfrastructureTools(server: FastMCP) {
 		},
 		execute: async ({ format }) => {
 			const requestId = generateId("stack_status");
-			const memgraphStatus = await getContainerStatus(CONTAINERS.memgraph);
-			const chromaStatus = await getContainerStatus(CONTAINERS.chroma);
+			const memgraphStatus = await getContainerStatus(
+				config.docker.containers.memgraph,
+			);
+			const chromaStatus = await getContainerStatus(
+				config.docker.containers.chroma,
+			);
 
 			const payload = {
 				requestId,

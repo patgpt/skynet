@@ -185,37 +185,38 @@ export function registerInteractionTools(server: FastMCP) {
 		}),
 		execute: async ({ topics, entities, user, limit, format }) => {
 			const requestId = generateId("interaction_findRelated");
+			const normalizedTopics =
+				topics?.filter((topic) => topic.trim().length > 0) ?? [];
+			const normalizedEntities =
+				entities?.filter((entity) => entity.trim().length > 0) ?? [];
+
+			if (
+				!user &&
+				normalizedTopics.length === 0 &&
+				normalizedEntities.length === 0
+			) {
+				return [
+					`Request ID: ${requestId}`,
+					"At least one filter (topics, entities, or user) must be provided.",
+				].join("\n");
+			}
+
 			const session = driver.session();
 			try {
-				const conditions: string[] = [];
-
-				if (topics && topics.length > 0) {
-					conditions.push(`t.name IN $topics`);
-				}
-
-				if (user) {
-					conditions.push(`i.user = $user`);
-				}
-
-				if (entities && entities.length > 0) {
-					conditions.push(
-						`any(entity IN i.entities WHERE entity IN $entities)`,
-					);
-				}
-
-				const query = queries.interactions.findRelated(
-					conditions.join(" AND "),
-				);
-
-				const res = await session.run(query, { topics, entities, user, limit });
+				const res = await session.run(queries.interactions.findRelated, {
+					user: user ?? null,
+					topics: normalizedTopics,
+					entities: normalizedEntities,
+					limit,
+				});
 				const results = res.records.map((record) =>
 					normalizeNeo4jRecord(record.toObject()),
 				);
 
 				const payload = {
 					requestId,
-					topics: topics ?? [],
-					entities: entities ?? [],
+					topics: normalizedTopics,
+					entities: normalizedEntities,
 					user: user ?? null,
 					limit,
 					results,

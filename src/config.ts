@@ -63,5 +63,9 @@ export const config = {
 		},
 	},
 } as const;
-
+for (const [key, value] of Object.entries(config)) {
+	if (typeof value === "string" && value === "") {
+		throw new Error(`Configuration error: ${key} cannot be an empty string.`);
+	}
+}
 export type AppConfig = typeof config;

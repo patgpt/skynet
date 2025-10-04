@@ -9,6 +9,14 @@
  * These queries cover user profiles, interactions, topics, and insights.
  */
 
+const RELATIONSHIP_TYPES = new Set([
+	"RELATED_TO",
+	"CONTRADICTS",
+	"BUILDS_ON",
+	"REFERENCES",
+	"SIMILAR_TO",
+]);
+
 export const queries = {
 	cognitive: {
 		getProfile: `
@@ -85,11 +93,18 @@ export const queries = {
       ORDER BY i.timestamp DESC
       LIMIT $limit
     `,
-		findRelated: (conditions: string) => `
-      MATCH (i:Interaction)
-      ${conditions}
-      RETURN DISTINCT i ORDER BY i.timestamp DESC LIMIT $limit
-    `,
+		findRelated: `
+        MATCH (i:Interaction)
+        OPTIONAL MATCH (i)-[:ABOUT]->(t:Topic)
+        WITH i, collect(DISTINCT t.name) AS topicNames
+        WHERE
+          ($user IS NULL OR i.user = $user)
+          AND (size($topics) = 0 OR any(topic IN topicNames WHERE topic IN $topics))
+          AND (size($entities) = 0 OR any(entity IN i.entities WHERE entity IN $entities))
+        RETURN DISTINCT i
+        ORDER BY i.timestamp DESC
+        LIMIT $limit
+      `,
 		getUserProfile: `
       MATCH (u:User {name: $user})
       OPTIONAL MATCH (u)-[:INITIATED]->(i:Interaction)
@@ -102,12 +117,17 @@ export const queries = {
       ORDER BY frequency DESC
       LIMIT 10
     `,
-		createRelationship: (relationshipType: string) => `
-      MATCH (a:Interaction {id: $fromId})
-      MATCH (b:Interaction {id: $toId})
-      CREATE (a)-[r:${relationshipType} $props]->(b)
-      RETURN r
-    `,
+		createRelationship: (relationshipType: string) => {
+			if (!RELATIONSHIP_TYPES.has(relationshipType)) {
+				throw new Error(`Invalid relationship type: ${relationshipType}`);
+			}
+			return `
+        MATCH (a:Interaction {id: $fromId})
+        MATCH (b:Interaction {id: $toId})
+        CREATE (a)-[r:${relationshipType} $props]->(b)
+        RETURN r
+      `;
+		},
 		getInsights: (userFilter: string) => `
       MATCH (i:Interaction ${userFilter})
       WHERE i.timestamp > datetime() - duration('P' + toString($days) + 'D')

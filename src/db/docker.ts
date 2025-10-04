@@ -52,18 +52,3 @@ function resolveDockerOptions():
  * Prefers explicitly configured host/socket overrides, then falls back to OS defaults.
  */
 export const docker = new Docker(resolveDockerOptions());
-
-/**
- * Network name for MCP containers
- */
-export const NETWORK_NAME = config.docker.network;
-
-/**
- * Container names
- */
-export const CONTAINERS = config.docker.containers;
-
-/**
- * Volume names
- */
-export const VOLUMES = config.docker.volumes;
