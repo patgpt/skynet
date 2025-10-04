@@ -2,7 +2,6 @@
 	"chat.mcp.serverSampling": {
 		"skynet/.vscode/mcp.json: skynet": {
 			"allowedModels": [
-				"copilot/gpt-4.1",
 				"copilot/claude-3.5-sonnet",
 				"copilot/claude-3.7-sonnet",
 				"copilot/claude-3.7-sonnet-thought",
@@ -12,6 +11,7 @@
 				"gemini/models/gemini-2.5-flash",
 				"gemini/models/gemini-2.5-pro",
 				"copilot/gemini-2.5-pro",
+				"copilot/gpt-4.1",
 				"copilot/gpt-4o",
 				"copilot/gpt-5",
 				"copilot/gpt-5-mini",

@@ -1,0 +1,26 @@
+# .github/workflows/release-npm.yml
+name: Release (npm, trusted publishing)
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # OIDC for npm
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - name: Ensure latest npm (req. for TP docs)
+        run: npm i -g npm@latest
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: npm publish --access public

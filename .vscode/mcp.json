@@ -2,8 +2,8 @@
 	"servers": {
 		"skynet": {
 			 
-			"command": "node",
-			"args": ["/Users/wavefunction/dev/skynet/dist/index.js"],
+			"command": "npx",
+			"args": ["@yellowdog-digital/skynet"],
 			"env": {
 				"MEMGRAPH_BOLT_URL": "bolt://localhost:7687",
 				"MEMGRAPH_USER": "",

@@ -8,12 +8,15 @@ const envSchema = z.object({
 	CHROMA_DEFAULT_COLLECTION: z.string().trim().default("skynet_memories"),
 	DOCKER_NETWORK: z.string().trim().default("mcp-local-net"),
 	DOCKER_MEMGRAPH_CONTAINER: z.string().trim().default("mcp-memgraph"),
+	DOCKER_MEMGRAPH_LAB_CONTAINER: z.string().trim().default("mcp-memgraph-lab"),
 	DOCKER_CHROMA_CONTAINER: z.string().trim().default("mcp-chroma"),
 	DOCKER_MEMGRAPH_VOLUME: z.string().trim().default("memgraph-data"),
 	DOCKER_CHROMA_VOLUME: z.string().trim().default("chroma-data"),
 	DOCKER_MEMGRAPH_IMAGE: z.string().trim().default("memgraph/memgraph:latest"),
+	DOCKER_MEMGRAPH_LAB_IMAGE: z.string().trim().default("memgraph/lab:latest"),
 	DOCKER_CHROMA_IMAGE: z.string().trim().default("chromadb/chroma:latest"),
 	DOCKER_MEMGRAPH_PORT: z.coerce.number().int().positive().default(7687),
+	DOCKER_MEMGRAPH_LAB_PORT: z.coerce.number().int().positive().default(3000),
 	DOCKER_CHROMA_PORT: z.coerce.number().int().positive().default(8000),
 	DOCKER_HOST: z.string().trim().optional(),
 	DOCKER_SOCKET_PATH: z.string().trim().optional(),
@@ -43,6 +46,7 @@ export const config = {
 		network: env.DOCKER_NETWORK,
 		containers: {
 			memgraph: env.DOCKER_MEMGRAPH_CONTAINER,
+			memgraphLab: env.DOCKER_MEMGRAPH_LAB_CONTAINER,
 			chroma: env.DOCKER_CHROMA_CONTAINER,
 		},
 		volumes: {
@@ -51,10 +55,12 @@ export const config = {
 		},
 		images: {
 			memgraph: env.DOCKER_MEMGRAPH_IMAGE,
+			memgraphLab: env.DOCKER_MEMGRAPH_LAB_IMAGE,
 			chroma: env.DOCKER_CHROMA_IMAGE,
 		},
 		ports: {
 			memgraph: env.DOCKER_MEMGRAPH_PORT,
+			memgraphLab: env.DOCKER_MEMGRAPH_LAB_PORT,
 			chroma: env.DOCKER_CHROMA_PORT,
 		},
 		connection: {

@@ -137,7 +137,7 @@ export async function getContainerStatus(name: string): Promise<{
 // Tool definitions following FastMCP best practices
 
 export function registerInfrastructureTools(server: FastMCP) {
-	const containerKeys = ["memgraph", "chroma"] as const;
+	const containerKeys = ["memgraph", "memgraphLab", "chroma"] as const;
 	type ContainerKey = (typeof containerKeys)[number];
 
 	server.addTool({
@@ -148,6 +148,9 @@ export function registerInfrastructureTools(server: FastMCP) {
 			chromaImage: z.string().default(config.docker.images.chroma),
 			memgraphPort: z.number().int().default(config.docker.ports.memgraph),
 			chromaPort: z.number().int().default(config.docker.ports.chroma),
+			enableLab: z.boolean().default(false).describe("Start Memgraph Lab UI on port 3000"),
+			labImage: z.string().default(config.docker.images.memgraphLab),
+			labPort: z.number().int().default(config.docker.ports.memgraphLab),
 		}),
 		annotations: {
 			title: "Start Docker Stack",
@@ -161,6 +164,9 @@ export function registerInfrastructureTools(server: FastMCP) {
 			chromaImage,
 			memgraphPort,
 			chromaPort,
+			enableLab,
+			labImage,
+			labPort,
 		}) => {
 			const requestId = generateId("stack_up");
 			try {
@@ -202,14 +208,33 @@ export function registerInfrastructureTools(server: FastMCP) {
 					],
 				);
 
-				return [
+				const output = [
 					`Request ID: ${requestId}`,
 					"✅ Docker stack started successfully",
 					`- Memgraph: ${memgraphImage} on port ${memgraphPort}`,
 					`- Chroma: ${chromaImage} on port ${chromaPort}`,
+				];
+
+				if (enableLab) {
+					await startContainer(
+						config.docker.containers.memgraphLab,
+						labImage,
+						[{ host: labPort, container: 3000 }],
+						[],
+						[
+							`QUICK_CONNECT_MG_HOST=${config.docker.containers.memgraph}`,
+							"QUICK_CONNECT_MG_PORT=7687",
+						],
+					);
+					output.push(`- Memgraph Lab: ${labImage} on port ${labPort} → http://localhost:${labPort}`);
+				}
+
+				output.push(
 					`- Network: ${config.docker.network}`,
 					`- Volumes: ${config.docker.volumes.memgraph}, ${config.docker.volumes.chroma}`,
-				].join("\n");
+				);
+
+				return output.join("\n");
 			} catch (error) {
 				return [
 					`Request ID: ${requestId}`,
@@ -227,7 +252,7 @@ export function registerInfrastructureTools(server: FastMCP) {
 	server.addTool({
 		name: "stack_down" as const,
 		description:
-			"Stop and remove selected Memgraph and/or Chroma containers with explicit confirmation",
+			"Stop and remove selected Memgraph, Memgraph Lab, and/or Chroma containers with explicit confirmation",
 		parameters: z.object({
 			containers: ContainerSelectorSchema,
 			force: z.boolean().default(false),
@@ -280,7 +305,7 @@ export function registerInfrastructureTools(server: FastMCP) {
 
 	server.addTool({
 		name: "stack_status" as const,
-		description: "Return running state and ids for both containers",
+		description: "Return running state and ids for all containers",
 		parameters: z.object({
 			format: outputFormatSchema,
 		}),
@@ -294,6 +319,9 @@ export function registerInfrastructureTools(server: FastMCP) {
 			const memgraphStatus = await getContainerStatus(
 				config.docker.containers.memgraph,
 			);
+			const memgraphLabStatus = await getContainerStatus(
+				config.docker.containers.memgraphLab,
+			);
 			const chromaStatus = await getContainerStatus(
 				config.docker.containers.chroma,
 			);
@@ -301,17 +329,25 @@ export function registerInfrastructureTools(server: FastMCP) {
 			const payload = {
 				requestId,
 				memgraph: memgraphStatus,
+				memgraphLab: memgraphLabStatus,
 				chroma: chromaStatus,
 			};
 
 			return formatTextOrJson(format, payload, () => {
-				return [
+				const lines = [
 					`Request ID: ${requestId}`,
 					"Docker Stack Status:",
 					"",
 					`Memgraph:\n- Name: ${memgraphStatus.name}\n- Running: ${memgraphStatus.running}\n- ID: ${memgraphStatus.id || "N/A"}`,
-					`Chroma:\n- Name: ${chromaStatus.name}\n- Running: ${chromaStatus.running}\n- ID: ${chromaStatus.id || "N/A"}`,
-				].join("\n");
+				];
+				
+				if (memgraphLabStatus.running || memgraphLabStatus.id) {
+					lines.push(`Memgraph Lab:\n- Name: ${memgraphLabStatus.name}\n- Running: ${memgraphLabStatus.running}\n- ID: ${memgraphLabStatus.id || "N/A"}`);
+				}
+				
+				lines.push(`Chroma:\n- Name: ${chromaStatus.name}\n- Running: ${chromaStatus.running}\n- ID: ${chromaStatus.id || "N/A"}`);
+				
+				return lines.join("\n");
 			});
 		},
 	});
