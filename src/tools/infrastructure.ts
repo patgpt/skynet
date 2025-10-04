@@ -148,7 +148,10 @@ export function registerInfrastructureTools(server: FastMCP) {
 			chromaImage: z.string().default(config.docker.images.chroma),
 			memgraphPort: z.number().int().default(config.docker.ports.memgraph),
 			chromaPort: z.number().int().default(config.docker.ports.chroma),
-			enableLab: z.boolean().default(false).describe("Start Memgraph Lab UI on port 3000"),
+			enableLab: z
+				.boolean()
+				.default(false)
+				.describe("Start Memgraph Lab UI on port 3000"),
 			labImage: z.string().default(config.docker.images.memgraphLab),
 			labPort: z.number().int().default(config.docker.ports.memgraphLab),
 		}),
@@ -226,7 +229,9 @@ export function registerInfrastructureTools(server: FastMCP) {
 							"QUICK_CONNECT_MG_PORT=7687",
 						],
 					);
-					output.push(`- Memgraph Lab: ${labImage} on port ${labPort} → http://localhost:${labPort}`);
+					output.push(
+						`- Memgraph Lab: ${labImage} on port ${labPort} → http://localhost:${labPort}`,
+					);
 				}
 
 				output.push(
@@ -340,13 +345,17 @@ export function registerInfrastructureTools(server: FastMCP) {
 					"",
 					`Memgraph:\n- Name: ${memgraphStatus.name}\n- Running: ${memgraphStatus.running}\n- ID: ${memgraphStatus.id || "N/A"}`,
 				];
-				
+
 				if (memgraphLabStatus.running || memgraphLabStatus.id) {
-					lines.push(`Memgraph Lab:\n- Name: ${memgraphLabStatus.name}\n- Running: ${memgraphLabStatus.running}\n- ID: ${memgraphLabStatus.id || "N/A"}`);
+					lines.push(
+						`Memgraph Lab:\n- Name: ${memgraphLabStatus.name}\n- Running: ${memgraphLabStatus.running}\n- ID: ${memgraphLabStatus.id || "N/A"}`,
+					);
 				}
-				
-				lines.push(`Chroma:\n- Name: ${chromaStatus.name}\n- Running: ${chromaStatus.running}\n- ID: ${chromaStatus.id || "N/A"}`);
-				
+
+				lines.push(
+					`Chroma:\n- Name: ${chromaStatus.name}\n- Running: ${chromaStatus.running}\n- ID: ${chromaStatus.id || "N/A"}`,
+				);
+
 				return lines.join("\n");
 			});
 		},
