@@ -1,6 +1,6 @@
 {
 	"name": "@patgpt/skynet",
-	"version": "1.0.0",
+	"version": "1.0.5",
 	"description": "Advanced Model Context Protocol server with persistent memory using Memgraph and ChromaDB",
 	"keywords": [
 		"mcp",
@@ -58,7 +58,7 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "bun build ./src/index.ts --outdir ./dist --target node --minify --external cohere-ai --external @google/generative-ai --external openai",
+		"build": "bun build ./src/index.ts --outdir ./dist --target node --minify --external cohere-ai --external @google/generative-ai --external openai --external onnxruntime-node",
 		"build:types": "tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist",
 		"build:all": "bun run build && bun run build:types",
 		"dev": "bun --hot src/index.ts",

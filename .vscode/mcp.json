@@ -1,9 +1,9 @@
 {
 	"servers": {
 		"skynet": {
-			"type": "stdio",
+			 
 			"command": "node",
-			"args": ["/Users/wavefunction/dev/patgpt-mcp/dist/index.js"],
+			"args": ["/Users/wavefunction/dev/skynet/dist/index.js"],
 			"env": {
 				"MEMGRAPH_BOLT_URL": "bolt://localhost:7687",
 				"MEMGRAPH_USER": "",
