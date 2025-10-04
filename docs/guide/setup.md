@@ -33,9 +33,28 @@ MEMGRAPH_PASS=
 
 # ChromaDB (Vector Database)
 CHROMA_URL=http://localhost:8000
+CHROMA_DEFAULT_COLLECTION=skynet_memories
 
-# Docker (if non-standard)
-# DOCKER_HOST=unix:///var/run/docker.sock
+# Logging (optional)
+MCP_LOG_LEVEL=info
+
+# Logging (optional)
+MCP_LOG_LEVEL=info
+
+# Docker network & resources
+DOCKER_NETWORK=mcp-local-net
+DOCKER_MEMGRAPH_CONTAINER=mcp-memgraph
+DOCKER_CHROMA_CONTAINER=mcp-chroma
+DOCKER_MEMGRAPH_VOLUME=memgraph-data
+DOCKER_CHROMA_VOLUME=chroma-data
+DOCKER_MEMGRAPH_IMAGE=memgraph/memgraph:latest
+DOCKER_CHROMA_IMAGE=chromadb/chroma:latest
+DOCKER_MEMGRAPH_PORT=7687
+DOCKER_CHROMA_PORT=8000
+
+# Docker host overrides (optional)
+# DOCKER_HOST=tcp://127.0.0.1:2375
+# DOCKER_SOCKET_PATH=/var/run/docker.sock
 ```
 
 ### 4. Start Databases

@@ -1,20 +1,4 @@
 {
-	"mcpServers": {
-		"skynet": {
-			"command": "bun",
-			"args": ["run", "index.ts"],
-			"cwd": "/Users/wavefunction/dev/skynet",
-			"env": {
-				"MEMGRAPH_HOST": "localhost",
-				"MEMGRAPH_PORT": "7687",
-				"MEMGRAPH_USERNAME": "",
-				"MEMGRAPH_PASSWORD": "",
-				"CHROMA_HOST": "localhost",
-				"CHROMA_PORT": "8000",
-				"CHROMA_API_URL": "http://localhost:8000"
-			}
-		}
-	},
 	"chat.mcp.serverSampling": {
 		"skynet/.vscode/mcp.json: skynet": {
 			"allowedModels": [

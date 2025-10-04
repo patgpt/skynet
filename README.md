@@ -148,7 +148,7 @@ bun run dist/index.js
 | [🏁 Getting Started](https://patgpt.github.io/skynet/guide/) | Installation and first steps |
 | [🏗️ Architecture](https://patgpt.github.io/skynet/guide/architecture) | System design and workflows |
 | [📘 API Reference](https://patgpt.github.io/skynet/api/) | Complete API documentation |
-| [🛠️ Tools Overview](https://patgpt.github.io/skynet/guide/tools) | All 18 tools explained |
+| [🛠️ Tools Overview](https://patgpt.github.io/skynet/guide/tools) | All 15 tools explained |
 
 <details>
 <summary>🖥️ <b>Local Documentation</b></summary>
@@ -171,7 +171,7 @@ bun run docs:api
 
 ---
 
-## 🛠️ Tools (18 total)
+## 🛠️ Tools (15 total)
 
 <details open>
 <summary><b>🏗️ Infrastructure (3 tools)</b></summary>
@@ -185,14 +185,13 @@ bun run docs:api
 </details>
 
 <details open>
-<summary><b>💾 Database (4 tools)</b></summary>
+<summary><b>💾 Database (3 tools)</b></summary>
 
 | Tool | Description |
 |------|-------------|
 | `graph_query` | 🔍 Execute Cypher queries on Memgraph |
 | `chroma_query` | 🔎 Semantic search in ChromaDB |
 | `chroma_add` | ➕ Add documents to ChromaDB |
-| `add` | ➗ Math utility (testing) |
 
 </details>
 
@@ -221,13 +220,11 @@ bun run docs:api
 </details>
 
 <details open>
-<summary><b>🤖 Cognitive (3 tools)</b></summary>
+<summary><b>🤖 Cognitive (1 tool)</b></summary>
 
 | Tool | Description |
 |------|-------------|
 | `skynet_think` | 💭 Process input & retrieve context |
-| `skynet_respond` | 💬 Store AI responses |
-| `skynet_validateMemory` | ✅ Validate memory storage |
 
 </details>
 
@@ -248,10 +245,10 @@ skynet/
 │   │   └── docker.ts            # Docker client
 │   └── 📂 tools/                # MCP tool implementations
 │       ├── infrastructure.ts    # Container management (3 tools)
-│       ├── database.ts          # DB access (4 tools)
+│       ├── database.ts          # DB access (3 tools)
 │       ├── memory.ts            # Semantic memory (2 tools)
 │       ├── interactions.ts      # User tracking (6 tools)
-│       └── cognitive.ts         # Skynet workflow (3 tools)
+│       └── cognitive.ts         # Skynet workflow (1 tool)
 ├── 📂 tests/                    # Test suite (Bun)
 ├── 📂 docs/                     # VitePress documentation
 │   ├── .vitepress/config.ts     # VitePress config
@@ -267,14 +264,11 @@ skynet/
 
 ```mermaid
 graph LR
-    A[User Query] --> B[skynet_think]
-    B --> C[Retrieve Context]
-    C --> D[Process Query]
-    D --> E[Generate Response]
-    E --> F[skynet_respond]
-    F --> G[Store Interaction]
-    G --> H[skynet_validateMemory]
-    H --> I[Verify Storage]
+	A[User Query] --> B[skynet_think]
+	B --> C[Retrieve Context]
+	C --> D[Generate Response]
+	D --> E[interaction_store]
+	E --> F[memory_store]
 ```
 
 ### 🗄️ **Databases**
@@ -289,8 +283,8 @@ graph LR
 1. **User Query** → `skynet_think` (retrieve context)
 2. **Process** query with historical context
 3. **Generate** intelligent response
-4. **Store** → `skynet_respond` (save interaction)
-5. **Validate** → `skynet_validateMemory` (verify storage)
+4. **Store** → `interaction_store` (persist conversation state)
+5. **Enrich** → `memory_store` (capture durable insights)
 
 > 🔍 **See [Architecture Guide](https://patgpt.github.io/skynet/guide/architecture) for detailed diagrams**
 
@@ -397,9 +391,25 @@ MEMGRAPH_PASS=
 
 # ChromaDB
 CHROMA_URL=http://localhost:8000
+CHROMA_DEFAULT_COLLECTION=skynet_memories
 
-# Docker (if non-standard)
-# DOCKER_HOST=unix:///var/run/docker.sock
+# Logging (optional)
+MCP_LOG_LEVEL=info
+
+# Docker network & resources
+DOCKER_NETWORK=mcp-local-net
+DOCKER_MEMGRAPH_CONTAINER=mcp-memgraph
+DOCKER_CHROMA_CONTAINER=mcp-chroma
+DOCKER_MEMGRAPH_VOLUME=memgraph-data
+DOCKER_CHROMA_VOLUME=chroma-data
+DOCKER_MEMGRAPH_IMAGE=memgraph/memgraph:latest
+DOCKER_CHROMA_IMAGE=chromadb/chroma:latest
+DOCKER_MEMGRAPH_PORT=7687
+DOCKER_CHROMA_PORT=8000
+
+# Docker host overrides (optional)
+# DOCKER_HOST=tcp://127.0.0.1:2375
+# DOCKER_SOCKET_PATH=/var/run/docker.sock
 ```
 
 </details>
