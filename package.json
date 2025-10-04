@@ -39,7 +39,7 @@
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"bin": {
-		"skynet": "./dist/index.js"
+		"skynet": "dist/index.js"
 	},
 	"files": [
 		"dist",
@@ -52,10 +52,6 @@
 		"node": ">=18.0.0",
 		"bun": ">=1.0.0"
 	},
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://npm.pkg.github.com"
-	},
 	"type": "module",
 	"scripts": {
 		"build": "bun build ./src/index.ts --outdir ./dist --target node --minify --external cohere-ai --external @google/generative-ai --external openai --external onnxruntime-node",
@@ -66,7 +62,6 @@
 		"test:watch": "bun test --watch",
 		"test:coverage": "bun test --coverage",
 		"typecheck": "tsc --noEmit",
-		 
 		"release": "bun run build:all && bun test && echo 'Ready for release! Push a git tag to trigger release workflow.'",
 		"prepublishOnly": "bun run build:all && bun test",
 		"pack:check": "npm pack --dry-run"

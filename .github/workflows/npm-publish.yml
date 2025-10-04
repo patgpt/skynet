@@ -71,20 +71,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: steps.version_check.outputs.published == 'false'
 
-      - name: Setup Node.js for GitHub Packages
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@patgpt"
-        if: steps.version_check.outputs.published == 'false'
-
-      - name: Publish to GitHub Packages
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.version_check.outputs.published == 'false'
-
       - name: Create summary
         run: |
           echo "### 📦 Published Successfully" >> $GITHUB_STEP_SUMMARY
@@ -93,14 +79,8 @@ jobs:
           echo "Version: \`$(jq -r .version package.json)\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "#### Install from npm" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "```bash" >> $GITHUB_STEP_SUMMARY
           echo "npx $(jq -r .name package.json)" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "#### Install from GitHub Packages" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "npx --registry=https://npm.pkg.github.com $(jq -r .name package.json)" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "```" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📦 npm: https://www.npmjs.com/package/$(jq -r .name package.json)" >> $GITHUB_STEP_SUMMARY
-          echo "📦 GitHub: https://github.com/patgpt/skynet/pkgs/npm/skynet" >> $GITHUB_STEP_SUMMARY
