@@ -2,38 +2,58 @@
  * Memgraph (Neo4j) Graph Database Client
  */
 import neo4j from "neo4j-driver";
-
-const BOLT_URL = process.env.MEMGRAPH_BOLT_URL ?? "bolt://localhost:7687";
-const NEO_USER = process.env.MEMGRAPH_USER ?? "";
-const NEO_PASS = process.env.MEMGRAPH_PASS ?? "";
+import { config } from "../config.js";
 
 /**
- * Neo4j driver instance for Memgraph graph database operations.
- * Used for storing interaction history, relationships, and user profiles.
+ * @name Memgraph Bolt Driver
+ * @description Configured Neo4j Bolt driver instance used to connect to the Memgraph graph database for storing interactions, relationships, and user profiles.
+ * @see https://docs.memgraph.com/data-processing/clients/javascript
  */
 export const driver = neo4j.driver(
-	BOLT_URL,
-	neo4j.auth.basic(NEO_USER, NEO_PASS),
+	config.memgraph.boltUrl,
+	neo4j.auth.basic(
+		config.memgraph.credentials.user,
+		config.memgraph.credentials.password,
+	),
 );
 
 /**
- * Helper to execute a Cypher query with proper session management
+ * @name executeQuery
+ * @description Runs a Cypher query against Memgraph using either a managed session or an existing transaction for proper lifecycle handling.
+ * @template T Mapped record shape returned to the caller.
+ * @param cypher - Cypher query text to execute.
+ * @param params - Named parameters supplied to the query.
+ * @param tx - Optional transaction to reuse when batching operations.
+ * @returns Result records converted to plain objects typed as {@link T}.
+ * @see https://docs.memgraph.com/data-processing/clients/javascript#run-a-cypher-query
  */
-export async function executeQuery<T = any>(
+export async function executeQuery<T = unknown>(
 	cypher: string,
-	params: Record<string, any> = {},
+	params: Record<string, unknown> = {},
+	tx?: import("neo4j-driver").Transaction,
 ): Promise<T[]> {
+	if (tx) {
+		// Use provided transaction
+		const res = await tx.run(cypher, params);
+		return res.records.map((r) => r.toObject()) as T[];
+	}
+
+	// Create new session for standalone query
 	const session = driver.session();
 	try {
 		const res = await session.run(cypher, params);
 		return res.records.map((r) => r.toObject()) as T[];
+	} catch (error) {
+		throw error;
 	} finally {
 		await session.close();
 	}
 }
 
 /**
- * Close the driver connection (for cleanup)
+ * @name closeDriver
+ * @description Gracefully closes the shared Memgraph driver connection to release sockets and other resources.
+ * @see https://docs.memgraph.com/data-processing/clients/javascript#close-the-connection
  */
 export async function closeDriver() {
 	await driver.close();

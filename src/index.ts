@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * Skynet MCP Server
  *
@@ -6,31 +7,43 @@
  * for semantic memory storage.
  *
  * @module skynet
- * @version 1.0.0
+ * @version See package.json
  */
 
-import { FastMCP } from "fastmcp";
-import { registerInfrastructureTools } from "./tools/infrastructure.js";
-import { registerDatabaseTools } from "./tools/database.js";
-import { registerMemoryTools } from "./tools/memory.js";
-import { registerInteractionTools } from "./tools/interactions.js";
+import { createServer } from "./server.js";
 import { registerCognitiveTools } from "./tools/cognitive.js";
+import { registerDatabaseTools } from "./tools/database.js";
+import { registerInfrastructureTools } from "./tools/infrastructure.js";
+import { registerInteractionTools } from "./tools/interactions.js";
+import { registerMemoryTools } from "./tools/memory.js";
 
 /**
  * FastMCP server instance - the core Model Context Protocol server.
  * Exposes tools and prompts for AI interaction with persistent memory.
  */
-const server = new FastMCP({
-	name: "Skynet",
-	version: "1.0.0",
-});
+export const skynet = createServer();
 
-// Register all tool categories
-registerInfrastructureTools(server);
-registerDatabaseTools(server);
-registerMemoryTools(server);
-registerInteractionTools(server);
-registerCognitiveTools(server);
+registerInfrastructureTools(skynet);
+registerDatabaseTools(skynet);
+registerMemoryTools(skynet);
+registerInteractionTools(skynet);
+registerCognitiveTools(skynet);
 
-// Export the server for use by the runtime
-export default server;
+// Start the server with error handling
+try {
+	skynet.start({
+		transportType: "stdio",
+	});
+} catch (error) {
+	console.error("[FATAL] Server failed to start:", error);
+	process.exit(1);
+}
+
+function handleExit(error: Error) {
+	console.error("[FATAL]", error);
+	process.exit(1);
+}
+
+// Handle uncaught errors
+process.on("uncaughtException", handleExit);
+process.on("unhandledRejection", handleExit);

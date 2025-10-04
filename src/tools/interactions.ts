@@ -1,16 +1,25 @@
-/**
- * Interaction Tools - Graph-based interaction tracking and analysis
- */
-import { z } from "zod";
 import type { FastMCP } from "fastmcp";
-import { driver, executeQuery } from "../db/memgraph.js";
+import { z } from "zod";
+import { driver } from "../db/memgraph.js";
+import { queries } from "../db/queries.js";
+import { formatErrorMessage } from "../utils/errors.js";
+import { formatTextOrJson } from "../utils/format.js";
+import { generateId } from "../utils/id.js";
+import { normalizeNeo4jRecord } from "../utils/neo4j.js";
+import { outputFormatSchema } from "../utils/schemas.js";
 
 /**
- * Register all interaction management tools with the FastMCP server
+ * @name registerInteractionTools
+ * @description Registers the interaction-related Model Context Protocol tools that manage graph persistence, analytics, and relationship building.
+ * @param server - FastMCP server instance used to expose the tools.
+ * @see https://patgpt.github.io/skynet/guide/tools
  */
 export function registerInteractionTools(server: FastMCP) {
 	/**
-	 * Store a user interaction in the graph database with full context.
+	 * @name interaction_store
+	 * @description Store a user interaction in Memgraph, linking entities, topics, and cross-interaction relationships.
+	 * @returns Multiline status summary including the generated request and interaction identifiers.
+	 * @see https://patgpt.github.io/skynet/guide/tools#interactions
 	 */
 	server.addTool({
 		name: "interaction_store",
@@ -28,76 +37,57 @@ export function registerInteractionTools(server: FastMCP) {
 			topics: z.array(z.string()).default([]),
 			previousInteractionId: z.string().optional(),
 		}),
-		execute: async ({
-			user,
-			input,
-			output,
-			intent,
-			sentiment,
-			entities,
-			topics,
-			previousInteractionId,
-		}) => {
+		execute: async (params) => {
+			const requestId = generateId("interaction_store");
+			const {
+				user,
+				input,
+				output,
+				intent,
+				sentiment,
+				entities,
+				topics,
+				previousInteractionId,
+			} = params;
 			const session = driver.session();
 			try {
-				const id = `int_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+				const id = generateId("int");
 
-				// Create interaction node
-				await session.run(
-					`
-          CREATE (i:Interaction {
-            id: $id,
-            user: $user,
-            input: $input,
-            output: $output,
-            timestamp: datetime(),
-            intent: $intent,
-            sentiment: $sentiment,
-            entities: $entities,
-            topics: $topics
-          })
-          RETURN i
-        `,
-					{ id, user, input, output, intent, sentiment, entities, topics },
-				);
+				await session.run(queries.interactions.createInteraction, {
+					id,
+					user,
+					input,
+					output,
+					intent,
+					sentiment,
+					entities,
+					topics,
+				});
 
-				// Create FOLLOWS relationship if there's a previous interaction
 				if (previousInteractionId) {
-					await session.run(
-						`
-            MATCH (i1:Interaction {id: $prevId})
-            MATCH (i2:Interaction {id: $currentId})
-            CREATE (i1)-[:FOLLOWS]->(i2)
-          `,
-						{ prevId: previousInteractionId, currentId: id },
-					);
+					await session.run(queries.interactions.follows, {
+						prevId: previousInteractionId,
+						currentId: id,
+					});
 				}
 
-				// Create or merge user node and relationship
-				await session.run(
-					`
-          MERGE (u:User {name: $user})
-          WITH u
-          MATCH (i:Interaction {id: $id})
-          CREATE (u)-[:INITIATED]->(i)
-        `,
-					{ user, id },
-				);
+				await session.run(queries.interactions.initiated, { user, id });
 
-				// Create topic nodes and relationships
 				for (const topic of topics) {
-					await session.run(
-						`
-            MERGE (t:Topic {name: $topic})
-            WITH t
-            MATCH (i:Interaction {id: $id})
-            CREATE (i)-[:ABOUT]->(t)
-          `,
-						{ topic, id },
-					);
+					await session.run(queries.interactions.about, { topic, id });
 				}
 
-				return `Stored interaction with ID: ${id}\nUser: ${user}\nTopics: ${topics.join(", ")}`;
+				return [
+					`Request ID: ${requestId}`,
+					`Stored interaction with ID: ${id}`,
+					`User: ${user}`,
+					`Topics: ${topics.join(", ") || "none"}`,
+				].join("\n");
+			} catch (error) {
+				return [
+					`Request ID: ${requestId}`,
+					formatErrorMessage("Interaction store", error),
+				].join("\n");
 			} finally {
 				await session.close();
 			}
@@ -105,7 +95,10 @@ export function registerInteractionTools(server: FastMCP) {
 	});
 
 	/**
-	 * Retrieve recent interaction history for a user.
+	 * @name interaction_getContext
+	 * @description Retrieve recent interaction history for a user with optional topic filtering and flexible output formatting.
+	 * @returns Text or JSON response summarizing the request parameters and matching interactions.
+	 * @see https://patgpt.github.io/skynet/guide/tools#interactions
 	 */
 	server.addTool({
 		name: "interaction_getContext",
@@ -116,34 +109,57 @@ export function registerInteractionTools(server: FastMCP) {
 			limit: z.number().int().default(10),
 			days: z.number().int().default(7),
 			topics: z.array(z.string()).optional(),
+			format: outputFormatSchema,
 		}),
-		execute: async ({ user, limit, days, topics }) => {
+		execute: async ({ user, limit, days, topics, format }) => {
+			const requestId = generateId("interaction_getContext");
 			const session = driver.session();
 			try {
 				const query =
 					topics && topics.length > 0
-						? `
-          MATCH (i:Interaction {user: $user})
-          WHERE i.timestamp > datetime() - duration({days: $days})
-          AND any(topic IN i.topics WHERE topic IN $topics)
-          RETURN i
-          ORDER BY i.timestamp DESC
-          LIMIT $limit
-        `
-						: `
-          MATCH (i:Interaction {user: $user})
-          WHERE i.timestamp > datetime() - duration({days: $days})
-          RETURN i
-          ORDER BY i.timestamp DESC
-          LIMIT $limit
-        `;
+						? queries.interactions.getContextWithTopics
+						: queries.interactions.getContext;
 
 				const res = await session.run(query, { user, days, limit, topics });
-				return JSON.stringify(
-					res.records.map((r) => r.toObject()),
-					null,
-					2,
+				const results = res.records.map((record) =>
+					normalizeNeo4jRecord(record.toObject()),
 				);
+
+				const payload = {
+					requestId,
+					user,
+					limit,
+					days,
+					topics: topics ?? [],
+					results,
+				};
+
+				return formatTextOrJson(format, payload, () => {
+					const lines = [
+						`Request ID: ${requestId}`,
+						`Recent interactions for "${user}" (last ${days} days, limit ${limit})`,
+					];
+
+					if (topics && topics.length > 0) {
+						lines.push(`Filtered topics: ${topics.join(", ")}`);
+					}
+
+					if (results.length === 0) {
+						lines.push("No interactions found.");
+					} else {
+						lines.push("", "Interactions:");
+						results.forEach((result, index) => {
+							lines.push(` ${index + 1}. ${JSON.stringify(result)}`);
+						});
+					}
+
+					return lines.join("\n");
+				});
+			} catch (error) {
+				return [
+					`Request ID: ${requestId}`,
+					formatErrorMessage("Interaction get context", error),
+				].join("\n");
 			} finally {
 				await session.close();
 			}
@@ -151,7 +167,10 @@ export function registerInteractionTools(server: FastMCP) {
 	});
 
 	/**
-	 * Find interactions related to specific topics or entities via graph traversal.
+	 * @name interaction_findRelated
+	 * @description Find interactions related to supplied topics, entities, or user context using graph traversal.
+	 * @returns Text or JSON payload describing related interactions and applied filters.
+	 * @see https://patgpt.github.io/skynet/guide/tools#interactions
 	 */
 	server.addTool({
 		name: "interaction_findRelated",
@@ -162,15 +181,15 @@ export function registerInteractionTools(server: FastMCP) {
 			entities: z.array(z.string()).optional(),
 			user: z.string().optional(),
 			limit: z.number().int().default(5),
+			format: outputFormatSchema,
 		}),
-		execute: async ({ topics, entities, user, limit }) => {
+		execute: async ({ topics, entities, user, limit, format }) => {
+			const requestId = generateId("interaction_findRelated");
 			const session = driver.session();
 			try {
-				let query = `MATCH (i:Interaction)`;
-				const conditions = [];
+				const conditions: string[] = [];
 
 				if (topics && topics.length > 0) {
-					query += `\nMATCH (i)-[:ABOUT]->(t:Topic)`;
 					conditions.push(`t.name IN $topics`);
 				}
 
@@ -184,18 +203,42 @@ export function registerInteractionTools(server: FastMCP) {
 					);
 				}
 
-				if (conditions.length > 0) {
-					query += `\nWHERE ` + conditions.join(" AND ");
-				}
-
-				query += `\nRETURN DISTINCT i ORDER BY i.timestamp DESC LIMIT $limit`;
+				const query = queries.interactions.findRelated(
+					conditions.join(" AND "),
+				);
 
 				const res = await session.run(query, { topics, entities, user, limit });
-				return JSON.stringify(
-					res.records.map((r) => r.toObject()),
-					null,
-					2,
+				const results = res.records.map((record) =>
+					normalizeNeo4jRecord(record.toObject()),
 				);
+
+				const payload = {
+					requestId,
+					topics: topics ?? [],
+					entities: entities ?? [],
+					user: user ?? null,
+					limit,
+					results,
+				};
+
+				return formatTextOrJson(format, payload, () => {
+					const lines = [`Request ID: ${requestId}`, "Related interactions:"];
+
+					if (results.length === 0) {
+						lines.push("None found.");
+					} else {
+						results.forEach((result, index) => {
+							lines.push(` ${index + 1}. ${JSON.stringify(result)}`);
+						});
+					}
+
+					return lines.join("\n");
+				});
+			} catch (error) {
+				return [
+					`Request ID: ${requestId}`,
+					formatErrorMessage("Interaction find related", error),
+				].join("\n");
 			} finally {
 				await session.close();
 			}
@@ -203,7 +246,10 @@ export function registerInteractionTools(server: FastMCP) {
 	});
 
 	/**
-	 * Retrieve or create a comprehensive user profile.
+	 * @name user_getProfile
+	 * @description Retrieve or create a user profile, capturing interaction counts and favorite topics.
+	 * @returns Text or JSON response describing the profile data and whether it was newly created.
+	 * @see https://patgpt.github.io/skynet/guide/tools#interactions
 	 */
 	server.addTool({
 		name: "user_getProfile",
@@ -211,51 +257,87 @@ export function registerInteractionTools(server: FastMCP) {
 			"Retrieve or create a user profile with preferences and interaction patterns",
 		parameters: z.object({
 			user: z.string(),
+			format: outputFormatSchema,
 		}),
-		execute: async ({ user }) => {
+		execute: async ({ user, format }) => {
+			const requestId = generateId("user_getProfile");
 			const session = driver.session();
 			try {
-				// Get user node and interaction count
-				const userRes = await session.run(
-					`
-          MATCH (u:User {name: $user})
-          OPTIONAL MATCH (u)-[:INITIATED]->(i:Interaction)
-          RETURN u, count(i) as interactionCount
-        `,
-					{ user },
-				);
+				const userRes = await session.run(queries.interactions.getUserProfile, {
+					user,
+				});
 
 				if (userRes.records.length === 0) {
-					// Create new user
-					await session.run(
-						`CREATE (u:User {name: $user, createdAt: datetime()})`,
-						{ user },
+					await session.run(queries.interactions.createUser, { user });
+					const payload = {
+						requestId,
+						user,
+						interactionCount: 0,
+						isNew: true,
+						favoriteTopics: [] as Array<{ topic: string; frequency: number }>,
+					};
+
+					return formatTextOrJson(format, payload, () =>
+						[
+							`Request ID: ${requestId}`,
+							`Created new profile for "${user}".`,
+						].join("\n"),
 					);
-					return JSON.stringify({ user, interactionCount: 0, isNew: true });
 				}
 
-				// Get user's favorite topics
 				const topicsRes = await session.run(
-					`
-          MATCH (u:User {name: $user})-[:INITIATED]->(i:Interaction)-[:ABOUT]->(t:Topic)
-          RETURN t.name as topic, count(*) as frequency
-          ORDER BY frequency DESC
-          LIMIT 10
-        `,
+					queries.interactions.favoriteTopics,
 					{ user },
 				);
 
-				const profile = {
+				const interactionCountRaw = userRes.records[0]?.get("interactionCount");
+				const interactionCount =
+					typeof (interactionCountRaw as { toNumber?: () => number })
+						?.toNumber === "function"
+						? (interactionCountRaw as { toNumber: () => number }).toNumber()
+						: Number(interactionCountRaw ?? 0);
+
+				const favoriteTopics = topicsRes.records.map((record) => {
+					const normalized = normalizeNeo4jRecord(record.toObject());
+					return {
+						topic: String(normalized.topic ?? ""),
+						frequency: Number(normalized.frequency ?? 0),
+					};
+				});
+
+				const payload = {
+					requestId,
 					user,
-					interactionCount:
-						userRes.records[0]?.get("interactionCount").toNumber() || 0,
-					favoriteTopics: topicsRes.records.map((r) => ({
-						topic: r.get("topic"),
-						frequency: r.get("frequency").toNumber(),
-					})),
+					interactionCount,
+					isNew: false,
+					favoriteTopics,
 				};
 
-				return JSON.stringify(profile, null, 2);
+				return formatTextOrJson(format, payload, () => {
+					const lines = [
+						`Request ID: ${requestId}`,
+						`Profile for "${user}"`,
+						`- Interaction count: ${interactionCount}`,
+					];
+
+					if (favoriteTopics.length === 0) {
+						lines.push("- No favorite topics identified yet.");
+					} else {
+						lines.push("- Favorite topics:");
+						favoriteTopics.forEach((topic) => {
+							lines.push(
+								`  • ${topic.topic || "(unknown)"} (${topic.frequency})`,
+							);
+						});
+					}
+
+					return lines.join("\n");
+				});
+			} catch (error) {
+				return [
+					`Request ID: ${requestId}`,
+					formatErrorMessage("User get profile", error),
+				].join("\n");
 			} finally {
 				await session.close();
 			}
@@ -263,7 +345,10 @@ export function registerInteractionTools(server: FastMCP) {
 	});
 
 	/**
-	 * Create a custom relationship between two interactions in the graph.
+	 * @name graph_createRelationship
+	 * @description Create a typed relationship between two interactions, optionally capturing metadata such as similarity scores.
+	 * @returns Confirmation message noting the relationship type and participating interaction IDs.
+	 * @see https://patgpt.github.io/skynet/guide/tools#interactions
 	 */
 	server.addTool({
 		name: "graph_createRelationship",
@@ -287,19 +372,23 @@ export function registerInteractionTools(server: FastMCP) {
 				.optional(),
 		}),
 		execute: async ({ fromId, toId, relationshipType, properties }) => {
+			const requestId = generateId("graph_createRelationship");
 			const session = driver.session();
 			try {
 				await session.run(
-					`
-          MATCH (a:Interaction {id: $fromId})
-          MATCH (b:Interaction {id: $toId})
-          CREATE (a)-[r:${relationshipType} $props]->(b)
-          RETURN r
-        `,
+					queries.interactions.createRelationship(relationshipType),
 					{ fromId, toId, props: properties || {} },
 				);
 
-				return `Created ${relationshipType} relationship from ${fromId} to ${toId}`;
+				return [
+					`Request ID: ${requestId}`,
+					`Created ${relationshipType} relationship from ${fromId} to ${toId}`,
+				].join("\n");
+			} catch (error) {
+				return [
+					`Request ID: ${requestId}`,
+					formatErrorMessage("Graph create relationship", error),
+				].join("\n");
 			} finally {
 				await session.close();
 			}
@@ -307,7 +396,10 @@ export function registerInteractionTools(server: FastMCP) {
 	});
 
 	/**
-	 * Analyze interaction patterns and extract meta-insights.
+	 * @name analytics_getInsights
+	 * @description Analyze interaction patterns to calculate aggregated metrics and trending topics over a configurable time window.
+	 * @returns Text or JSON summary containing analytics metadata, aggregated counts, and trending topics.
+	 * @see https://patgpt.github.io/skynet/guide/tools#interactions
 	 */
 	server.addTool({
 		name: "analytics_getInsights",
@@ -316,46 +408,64 @@ export function registerInteractionTools(server: FastMCP) {
 		parameters: z.object({
 			user: z.string().optional(),
 			days: z.number().int().default(30),
+			format: outputFormatSchema,
 		}),
-		execute: async ({ user, days }) => {
+		execute: async ({ user, days, format }) => {
+			const requestId = generateId("analytics_getInsights");
 			const session = driver.session();
 			try {
 				const userFilter = user ? `{user: $user}` : ``;
 
-				// Get conversation patterns
 				const patternsRes = await session.run(
-					`
-          MATCH (i:Interaction ${userFilter})
-          WHERE i.timestamp > datetime() - duration({days: $days})
-          RETURN 
-            count(i) as totalInteractions,
-            collect(DISTINCT i.intent) as intents,
-            collect(DISTINCT i.sentiment) as sentiments,
-            size(collect(DISTINCT i.topics)) as uniqueTopics
-        `,
+					queries.interactions.getInsights(userFilter),
 					{ user, days },
 				);
 
-				// Get topic trends
 				const topicsRes = await session.run(
-					`
-          MATCH (i:Interaction ${userFilter})-[:ABOUT]->(t:Topic)
-          WHERE i.timestamp > datetime() - duration({days: $days})
-          RETURN t.name as topic, count(*) as mentions
-          ORDER BY mentions DESC
-          LIMIT 10
-        `,
+					queries.interactions.topicTrends(userFilter),
 					{ user, days },
 				);
 
-				const insights = {
+				const summaryRecord = patternsRes.records[0]?.toObject() ?? {};
+				const summary = normalizeNeo4jRecord(summaryRecord);
+				const trendingTopics = topicsRes.records.map((record) =>
+					normalizeNeo4jRecord(record.toObject()),
+				);
+
+				const payload = {
+					requestId,
 					period: `Last ${days} days`,
 					user: user || "all users",
-					summary: patternsRes.records[0]?.toObject(),
-					trendingTopics: topicsRes.records.map((r) => r.toObject()),
+					summary,
+					trendingTopics,
 				};
 
-				return JSON.stringify(insights, null, 2);
+				return formatTextOrJson(format, payload, () => {
+					const lines = [
+						`Request ID: ${requestId}`,
+						`Insights for ${user || "all users"} (last ${days} days)`,
+					];
+
+					if (Object.keys(summary).length > 0) {
+						lines.push("Summary:", JSON.stringify(summary));
+					}
+
+					if (trendingTopics.length === 0) {
+						lines.push("No trending topics detected.");
+					} else {
+						lines.push("Trending topics:");
+						trendingTopics.forEach((topic, index) => {
+							lines.push(` ${index + 1}. ${JSON.stringify(topic)}`);
+						});
+					}
+
+					return lines.join("\n");
+				});
+			} catch (error) {
+				return [
+					`Request ID: ${requestId}`,
+					formatErrorMessage("Analytics get insights", error),
+				].join("\n");
 			} finally {
 				await session.close();
 			}

@@ -1,35 +1,69 @@
-/**
- * Docker client for container management
- */
 import Docker from "dockerode";
+import { config } from "../config.js";
+
+const { connection } = config.docker;
+
+function resolveDockerOptions():
+	| { socketPath: string }
+	| { host: string; port?: number; protocol?: "http" | "https" | "ssh" } {
+	if (connection.socketPath) {
+		return { socketPath: connection.socketPath };
+	}
+
+	if (connection.host) {
+		if (connection.host.includes("://")) {
+			const url = new URL(connection.host);
+			const options: {
+				host: string;
+				port?: number;
+				protocol?: "http" | "https" | "ssh";
+			} = {
+				host: url.hostname,
+			};
+
+			if (url.port) {
+				options.port = Number(url.port);
+			}
+
+			const rawProtocol = url.protocol.replace(/:$/, "");
+			if (
+				rawProtocol === "http" ||
+				rawProtocol === "https" ||
+				rawProtocol === "ssh"
+			) {
+				options.protocol = rawProtocol;
+			} else if (rawProtocol === "tcp") {
+				options.protocol = "http";
+			}
+
+			return options;
+		}
+
+		return { host: connection.host };
+	}
+
+	return process.platform === "win32"
+		? { host: "npipe:////./pipe/docker_engine" }
+		: { socketPath: "/var/run/docker.sock" };
+}
 
 /**
  * Docker client instance for container management.
- * Automatically detects Windows (named pipe) vs Unix (socket) Docker daemon.
+ * Prefers explicitly configured host/socket overrides, then falls back to OS defaults.
  */
-export const docker = new Docker(
-	process.platform === "win32"
-		? { host: process.env.DOCKER_HOST ?? "npipe:////./pipe/docker_engine" }
-		: { socketPath: "/var/run/docker.sock" },
-);
+export const docker = new Docker(resolveDockerOptions());
 
 /**
  * Network name for MCP containers
  */
-export const NETWORK_NAME = "mcp-local-net";
+export const NETWORK_NAME = config.docker.network;
 
 /**
  * Container names
  */
-export const CONTAINERS = {
-	MEMGRAPH: "mcp-memgraph",
-	CHROMA: "mcp-chroma",
-} as const;
+export const CONTAINERS = config.docker.containers;
 
 /**
  * Volume names
  */
-export const VOLUMES = {
-	MEMGRAPH: "memgraph-data",
-	CHROMA: "chroma-data",
-} as const;
+export const VOLUMES = config.docker.volumes;

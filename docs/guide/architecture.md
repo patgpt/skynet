@@ -14,7 +14,7 @@ Skynet MCP Server uses a dual-database architecture for comprehensive AI memory:
 ┌────────────────▼────────────────────────┐
 │       Skynet MCP Server (FastMCP)       │
 │  ┌──────────────────────────────────┐   │
-│  │     18 Tools (5 Categories)      │   │
+│  │     15 Tools (5 Categories)      │   │
 │  └──────────────────────────────────┘   │
 └─────┬────────────────────────┬──────────┘
       │                        │
@@ -53,11 +53,10 @@ Skynet MCP Server uses a dual-database architecture for comprehensive AI memory:
 - Network and volume orchestration
 - Health monitoring
 
-#### 2. Database Tools (4)
+#### 2. Database Tools (3)
 - Direct Cypher query execution
 - Vector search and indexing
 - Document storage
-- Testing utilities
 
 #### 3. Memory Tools (2)
 - Semantic memory storage with metadata
@@ -70,10 +69,8 @@ Skynet MCP Server uses a dual-database architecture for comprehensive AI memory:
 - Topic and entity extraction
 - Analytics and insights
 
-#### 5. Cognitive Tools (3)
-- Pre-processing workflow (skynet_think)
-- Post-processing storage (skynet_respond)
-- Memory validation
+#### 5. Cognitive Tools (1)
+- Pre-processing workflow (`skynet_think`)
 
 ## Data Flow
 
@@ -89,14 +86,14 @@ skynet_think()
 AI Processing
     │
     ▼
-skynet_respond()
+interaction_store()
     │
     ├──► Memgraph: Store interaction node
     │              Create relationships
     │              Link topics
     │
-    └──► ChromaDB: Store semantic memory (optional)
-                   Create embedding
+    └──► memory_store() (optional)
+                   └──► ChromaDB: Persist semantic memory
 ```
 
 ### Retrieving Context

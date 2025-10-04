@@ -1,6 +1,6 @@
 # Tools Overview
 
-Skynet MCP Server provides 18 tools across 5 categories.
+Skynet MCP Server provides 15 tools across 5 categories.
 
 ## Infrastructure Tools (3)
 
@@ -21,18 +21,23 @@ Start or ensure Memgraph and Chroma Docker containers are running.
 Stop and remove the Memgraph and Chroma containers.
 
 **Parameters:**
-- `force` (boolean, default: `true`)
+- `containers` (`"all"` or array of container keys)
+- `force` (boolean, default: `false`)
+- `confirm` (must be `true`) — acknowledgement for this destructive action
 
 **Returns:** Success message
 
 ### `stack_status`
 Get current running status and IDs of both containers.
 
-**Returns:** JSON with container status
+**Parameters:**
+- `format` (`"text" | "json"`, default: `"text"`)
+
+**Returns:** Container status in the requested format
 
 ---
 
-## Database Tools (4)
+## Database Tools (3)
 
 Direct access to graph and vector databases.
 
@@ -42,6 +47,7 @@ Execute a Cypher query against Memgraph.
 **Parameters:**
 - `cypher` (string) - Cypher query string
 - `params` (object, optional) - Query parameters
+- `format` (`"text" | "json"`, default: `"text"`)
 
 **Returns:** JSON array of query results
 
@@ -52,8 +58,9 @@ Query a ChromaDB collection using semantic search.
 - `collection` (string) - Collection name
 - `queryTexts` (string[]) - Array of query strings
 - `nResults` (number, default: `5`)
+- `format` (`"text" | "json"`, default: `"text"`)
 
-**Returns:** JSON with query results
+**Returns:** Query results formatted as requested
 
 ### `chroma_add`
 Add documents to a ChromaDB collection.
@@ -65,15 +72,6 @@ Add documents to a ChromaDB collection.
 - `ids` (string[], optional)
 
 **Returns:** Success message
-
-### `add`
-Simple addition tool for testing.
-
-**Parameters:**
-- `a` (number)
-- `b` (number)
-
-**Returns:** Sum as string
 
 ---
 
@@ -106,8 +104,9 @@ Search semantic memories using natural language.
 - `nResults` (number, default: `5`)
 - `filter` (object, optional):
   - `type`, `user`, `minImportance`
+- `format` (`"text" | "json"`, default: `"text"`)
 
-**Returns:** JSON with matching memories
+**Returns:** Matching memories formatted per the requested output
 
 ---
 
@@ -138,8 +137,9 @@ Retrieve recent interaction history for a user.
 - `limit` (number, default: `10`)
 - `days` (number, default: `7`)
 - `topics` (string[], optional)
+- `format` (`"text" | "json"`, default: `"text"`)
 
-**Returns:** JSON array of interactions
+**Returns:** Interaction list in the requested format
 
 ### `interaction_findRelated`
 Find interactions related to topics or entities.
@@ -149,16 +149,18 @@ Find interactions related to topics or entities.
 - `entities` (string[], optional)
 - `user` (string, optional)
 - `limit` (number, default: `5`)
+- `format` (`"text" | "json"`, default: `"text"`)
 
-**Returns:** JSON array of related interactions
+**Returns:** Related interactions in the requested format
 
 ### `user_getProfile`
 Retrieve or create a user profile.
 
 **Parameters:**
 - `user` (string)
+- `format` (`"text" | "json"`, default: `"text"`)
 
-**Returns:** JSON profile with interaction count and favorite topics
+**Returns:** Profile details formatted as requested
 
 ### `graph_createRelationship`
 Create a custom relationship between two interactions.
@@ -179,51 +181,25 @@ Analyze interaction patterns and extract insights.
 **Parameters:**
 - `user` (string, optional)
 - `days` (number, default: `30`)
+- `format` (`"text" | "json"`, default: `"text"`)
 
-**Returns:** JSON with statistics and trending topics
+**Returns:** Statistics and trending topics in the requested format
 
 ---
 
-## Cognitive Tools (3)
+## Cognitive Tools (1)
 
-Skynet's reasoning and memory workflow.
+Skynet's context gathering workflow.
 
 ### `skynet_think`
 **MANDATORY:** Process user input and retrieve context.
 
-Call this FIRST before responding to any user query.
+Call this first before responding to any user query.
 
 **Parameters:**
 - `user` (string)
 - `input` (string)
 - `extractTopics` (boolean, default: `true`)
+- `format` (`"text" | "json"`, default: `"text"`)
 
-**Returns:** JSON context with user profile, history, and suggested topics
-
-### `skynet_respond`
-**MANDATORY:** Store AI response after answering user.
-
-Call this AFTER formulating your response.
-
-**Parameters:**
-- `user` (string)
-- `input` (string)
-- `output` (string)
-- `topics` (string[], default: `[]`)
-- `entities` (string[], default: `[]`)
-- `intent` (optional): `"question" | "request" | "statement" | "feedback" | "greeting" | "other"`
-- `sentiment` (optional): `"positive" | "negative" | "neutral" | "mixed"`
-- `previousInteractionId` (string, optional)
-- `storeMemory` (boolean, default: `false`)
-- `memoryContent` (string, optional)
-- `memoryType` (optional): `"insight" | "fact" | "preference" | "pattern" | "connection"`
-
-**Returns:** JSON with success status and interaction ID
-
-### `skynet_validateMemory`
-Verify that the interaction has been stored.
-
-**Parameters:**
-- `interactionId` (string, optional)
-
-**Returns:** Validation status and message
+**Returns:** Context metadata, suggested topics, and recent interactions (respecting the requested format)

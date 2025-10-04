@@ -20,7 +20,7 @@ features:
   - title: 🧠 Persistent Memory
     details: Dual database architecture with Memgraph (graph) and ChromaDB (vector) for semantic memory and relationship tracking
   
-  - title: 🔧 18 MCP Tools
+  - title: 🔧 15 MCP Tools
     details: Comprehensive toolset for infrastructure, database access, memory management, interaction tracking, and cognitive workflows
   
   - title: ⚡ Bun-First
